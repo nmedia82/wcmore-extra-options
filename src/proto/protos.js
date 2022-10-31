@@ -3,25 +3,25 @@ export function ExtraField(field) {
     label: field.label,
     details: field.details,
     icon: field.icon,
-    meta: field.meta,
-    init() {
-      // dynamically getter/setter
-      for (let p in this) {
-        // console.log(p, typeof this[p]);
-        if (typeof this[p] === "string") {
-          Object.defineProperty(this, `${titleCase(p)}`, {
-            get: function () {
-              return this[p];
-            },
-            set: function (a) {
-              this[p] = a;
-            },
-          });
-        }
-      }
+    meta: field.meta.map((m) => (m = { ...m, value: "" })), // init meta value
+    // init() {
+    //   // dynamically getter/setter
+    //   for (let p in this) {
+    //     // console.log(p, typeof this[p]);
+    //     if (typeof this[p] === "string") {
+    //       Object.defineProperty(this, `${titleCase(p)}`, {
+    //         get: function () {
+    //           return this[p];
+    //         },
+    //         set: function (a) {
+    //           this[p] = a;
+    //         },
+    //       });
+    //     }
+    //   }
 
-      //
-    },
+    //   //
+    // },
   };
 }
 

@@ -40,6 +40,37 @@
     "label": "Color Options",
     "details": "color options input",
     "icon": "dropdown",
-    "meta": []
+    "meta": [
+      {
+        "name": "title",
+        "type": "text",
+        "title": "Field title",
+        "detail": "Title to be displayed"
+      },
+      {
+        "name": "field_id",
+        "type": "text",
+        "title": "Field id",
+        "detail": "Unique field id"
+      },
+      {
+        "name": "description",
+        "type": "text",
+        "title": "Field description",
+        "detail": "Description to be displayed"
+      },
+      {
+        "name": "is_required",
+        "type": "boolean",
+        "title": "Required?",
+        "detail": "Set as required"
+      },
+      {
+        "name": "options",
+        "type": "options",
+        "title": "Field options",
+        "detail": ""
+      }
+    ]
   }
 ]

@@ -5,19 +5,27 @@ import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 import meta from "./data/meta.json";
 import { ExtraField } from "./proto/protos";
+import useLocalStorage from "./common/useLocalStorage";
 
 // Importing Components
 import CreateOption from "./page/create-options";
 
 function App() {
   const [Meta, setMeta] = useState([]);
+  const [Fields, setFields] = useLocalStorage("wcmore_fields", []);
+
+  const handleSaveFields = (field) => {
+    // const fields = [...Fields, field];
+    // setFields(fields);
+    // setSelectedField(field);
+  };
 
   useEffect(() => {
     let metaObjs = [];
     for (let field of meta) {
       const Field = ExtraField(field);
-      Field.init();
-      console.log(Field);
+      // Field.init();
+      // console.log(Field);
       metaObjs.push(Field);
     }
 
@@ -28,7 +36,11 @@ function App() {
     <>
       <ToastContainer />
 
-      <CreateOption Meta={Meta} />
+      <CreateOption
+        Meta={Meta}
+        SavedFields={Fields}
+        onSaveFields={handleSaveFields}
+      />
     </>
   );
 }
