@@ -42,45 +42,91 @@ function CreateOption({ Meta, SavedFields }) {
     setIsOpen(false);
   }
 
-  const addNewField = (field) => {
+  const addNewField = (meta) => {
+    // A Deep copy of meta object to unlink from Meta Objects
+    let field = JSON.parse(JSON.stringify(meta));
     field = { ...field, _id: wcmore_get_field_id() };
-    console.log(field);
     const fields = [...Fields, field];
     setFields(fields);
     // const last = fields[fields.length - 1];
     // setSelectedField(field);
-    // openModal(last);
+    openModal(field);
   };
 
   const handleMetaChange = (e, setting) => {
-    setting.value = wcmore_get_input_value(e);
+    const input_value = wcmore_get_input_value(e);
+    setting.value = input_value;
     const selected_field = { ...SelectedField };
     // console.log(selected_field);
     let found = selected_field.meta.find((m) => m.name === setting.name);
-    const index = selected_field.meta.indexOf(found);
+    let index = selected_field.meta.indexOf(found);
     selected_field.meta[index] = setting;
+
+    // setting field id
+    if (setting.name === "title") {
+      found = selected_field.meta.find((m) => m.name === "field_id");
+      index = selected_field.meta.indexOf(found);
+      selected_field.meta[index].value = input_value
+        .toLowerCase()
+        .replace(/[^a-z0-9]/g, "");
+    }
     console.log(selected_field);
     setSelectedField(selected_field);
   };
 
   // saving single meta values
   const saveSingleMeta = () => {
-    console.log(SelectedField);
     const fields = [...Fields];
     let found = fields.find((f) => f._id === SelectedField._id);
     const index = fields.indexOf(found);
     fields[index] = SelectedField;
     console.log(fields);
     setFields(fields);
+    closeModal();
   };
+
+  const getFieldTitle = (field) => {
+    let title = "New Field";
+    const meta_title = field.meta.find((m) => m.name === "title");
+    if (meta_title) {
+      title = `${meta_title.value}`;
+    }
+    return (
+      <span>
+        {title} <small>{`(${field.label})`}</small>
+      </span>
+    );
+  };
+
+  // deleting field from list
+  const handleDelete = (field) => {
+    const filter = Fields.filter((f) => f._id !== field._id);
+    setFields(filter);
+  };
+
+  // cloning field from list
+  const handleClone = (field) => {
+    const new_field = { ...field, _id: wcmore_get_field_id() };
+    // changing new field title
+    const field_meta = JSON.parse(JSON.stringify(new_field.meta));
+    let found = field_meta.find((m) => m.name === "title");
+    const index = field_meta.indexOf(found);
+    field_meta[index].value = `Copy of ${field_meta[index].value}`;
+    new_field.meta = [...field_meta];
+    const fields = [...Fields, new_field];
+    setFields(fields);
+  };
+
+  // handleMove
+  // https://codesandbox.io/s/reorder-draggable-list-array-forked-xtpgch?file=/src/App.js:682-752
 
   return (
     <div id="wcmore-productoptions">
       <div className="wcmore-panel left">
         <ul className="wcmore-meta-fields">
-          {Meta.map((field, c) => (
-            <li key={c} onClick={(e) => addNewField(field)}>
-              {field.label}
+          {Meta.map((meta, c) => (
+            <li key={c} onClick={(e) => addNewField(meta)}>
+              {meta.label}
             </li>
           ))}
         </ul>
@@ -89,44 +135,58 @@ function CreateOption({ Meta, SavedFields }) {
         <div className="wcmore-field-settings">
           {Fields.map((field, i) => (
             <div className="wcmore-field-single" key={`setting${i}`}>
-              <span className="wcmore-field-setting label">{field.label}</span>
+              <span className="wcmore-field-setting label">
+                {getFieldTitle(field)}
+              </span>
               <span
                 className="wcmore-field-setting edit"
                 onClick={() => openModal(field)}
               >
                 Edit
               </span>
-              <span className="wcmore-field-setting delete">Delete</span>
+              <span
+                className="wcmore-field-setting delete"
+                onClick={() => handleDelete(field)}
+              >
+                Delete
+              </span>
+              <span
+                className="wcmore-field-setting clone"
+                onClick={() => handleClone(field)}
+              >
+                Clone
+              </span>
               <span className="wcmore-field-setting move">Move</span>
             </div>
           ))}
         </div>
       </div>
-      <Modal
-        isOpen={modalIsOpen}
-        onAfterOpen={afterOpenModal}
-        onRequestClose={closeModal}
-        style={customStyles}
-        contentLabel="Example Modal"
-      >
-        {JSON.stringify(SelectedField)}
-        <header
-          className="wcmore-header"
-          ref={(_subtitle) => (subtitle = _subtitle)}
+      {SelectedField.meta !== undefined && (
+        <Modal
+          isOpen={modalIsOpen}
+          onAfterOpen={afterOpenModal}
+          onRequestClose={closeModal}
+          style={customStyles}
+          contentLabel="Example Modal"
         >
-          {SelectedField.label}
-        </header>
-        <div className="wcmore-field-meta">
-          {SelectedField.meta !== undefined &&
-            SelectedField.meta.map((m, j) => (
+          {JSON.stringify(SelectedField)}
+          <header
+            className="wcmore-header"
+            ref={(_subtitle) => (subtitle = _subtitle)}
+          >
+            {getFieldTitle(SelectedField)}
+          </header>
+          <div className="wcmore-field-meta">
+            {SelectedField.meta.map((m, j) => (
               <div key={`meta${j}`}>
                 <Input meta={m} onMetaChange={handleMetaChange} />
               </div>
             ))}
-        </div>
-        <button onClick={closeModal}>close</button>
-        <button onClick={saveSingleMeta}>Save</button>
-      </Modal>
+          </div>
+          {/* <button onClick={closeModal}>Cancel</button> */}
+          <button onClick={saveSingleMeta}>Save & Close</button>
+        </Modal>
+      )}
     </div>
   );
 }

@@ -4,7 +4,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 import meta from "./data/meta.json";
-import { ExtraField } from "./proto/protos";
+import { FieldClass } from "./proto/protos";
 import useLocalStorage from "./common/useLocalStorage";
 
 // Importing Components
@@ -23,13 +23,13 @@ function App() {
   useEffect(() => {
     let metaObjs = [];
     for (let field of meta) {
-      const Field = ExtraField(field);
+      const Field = new FieldClass(field);
       // Field.init();
       // console.log(Field);
       metaObjs.push(Field);
     }
 
-    setMeta(metaObjs);
+    setMeta([...metaObjs]);
   }, []);
 
   return (

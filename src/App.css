@@ -59,6 +59,7 @@ ul.wcmore-meta-fields li {
 .wcmore-field-setting.label {
   flex: 12;
   text-align: left;
+  cursor:move;
 }
 
 .wcmore-field-meta {

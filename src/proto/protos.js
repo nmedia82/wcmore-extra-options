@@ -1,34 +1,8 @@
-export function ExtraField(field) {
-  return {
-    label: field.label,
-    details: field.details,
-    icon: field.icon,
-    meta: field.meta.map((m) => (m = { ...m, value: "" })), // init meta value
-    // init() {
-    //   // dynamically getter/setter
-    //   for (let p in this) {
-    //     // console.log(p, typeof this[p]);
-    //     if (typeof this[p] === "string") {
-    //       Object.defineProperty(this, `${titleCase(p)}`, {
-    //         get: function () {
-    //           return this[p];
-    //         },
-    //         set: function (a) {
-    //           this[p] = a;
-    //         },
-    //       });
-    //     }
-    //   }
-
-    //   //
-    // },
-  };
-}
-
-export function FieldMeta(meta) {
-  return {};
-}
-
-function titleCase(string) {
-  return string[0].toUpperCase() + string.slice(1).toLowerCase();
+export class FieldClass {
+  constructor(params) {
+    this.label = params.label;
+    this.details = params.details;
+    this.icon = params.icon;
+    this.meta = params.meta.map((m) => (m = { ...m, value: "" })); // init meta value
+  }
 }
