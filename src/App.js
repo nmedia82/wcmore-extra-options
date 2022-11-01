@@ -6,6 +6,7 @@ import "./App.css";
 import meta from "./data/meta.json";
 import { FieldClass } from "./proto/protos";
 import useLocalStorage from "./common/useLocalStorage";
+import { toast } from "react-toastify";
 
 // Importing Components
 import CreateOption from "./page/create-options";
@@ -14,8 +15,10 @@ function App() {
   const [Meta, setMeta] = useState([]);
   const [Fields, setFields] = useLocalStorage("wcmore_fields", []);
 
-  const handleSaveFields = (field) => {
-    // const fields = [...Fields, field];
+  const handleSaveFields = (fields) => {
+    console.log(fields);
+    setFields(fields);
+    toast.success("Fields saved.");
     // setFields(fields);
     // setSelectedField(field);
   };

@@ -17,3 +17,16 @@ export function wcmore_get_field_id() {
 
   return text;
 }
+
+export function wcmore_create_field_title(field) {
+  let title = "New Field";
+  const meta_title = field.meta.find((m) => m.name === "title");
+  if (meta_title) {
+    title = `${meta_title.value}`;
+  }
+  return (
+    <span>
+      {title} <small>{`(${field.label})`}</small>
+    </span>
+  );
+}

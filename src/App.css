@@ -56,10 +56,15 @@ ul.wcmore-meta-fields li {
   cursor: pointer;
 }
 
+.wcmore-field-single.status-false {
+  color: #fff;
+  background-color: red;
+}
+
 .wcmore-field-setting.label {
   flex: 12;
   text-align: left;
-  cursor:move;
+  cursor: move;
 }
 
 .wcmore-field-meta {
