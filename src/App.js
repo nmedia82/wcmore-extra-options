@@ -23,10 +23,6 @@ function App() {
     // setSelectedField(field);
   };
 
-  const CallMe = () => {
-    alert("hi");
-  };
-
   useEffect(() => {
     let metaObjs = [];
     for (let field of meta) {
@@ -39,6 +35,13 @@ function App() {
     setMeta([...metaObjs]);
   }, []);
 
+  const handleMediaSelect = () => {
+    var i = 2;
+    window.handleWPMediaSelect(i, function (j) {
+      console.log(`${i} turned to ${j}`);
+    });
+  };
+
   return (
     <>
       <ToastContainer />
@@ -47,6 +50,7 @@ function App() {
         Meta={Meta}
         SavedFields={Fields}
         onSaveFields={handleSaveFields}
+        onMediaSelect={handleMediaSelect}
       />
     </>
   );

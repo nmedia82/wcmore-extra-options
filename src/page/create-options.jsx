@@ -9,7 +9,7 @@ import {
 } from "../common/helper";
 import FieldItem from "./field-item";
 
-Modal.setAppElement("#wcmore-root");
+Modal.setAppElement("#wcforce-root");
 
 const customStyles = {
   content: {
@@ -37,7 +37,7 @@ const reorder = (list, startIndex, endIndex) => {
 //   ));
 // });
 
-function CreateOption({ Meta, SavedFields, onSaveFields }) {
+function CreateOption({ Meta, SavedFields, onSaveFields, onMediaSelect }) {
   let subtitle;
   const [SelectedField, setSelectedField] = useState({});
   const [Fields, setFields] = useState([]);
@@ -163,6 +163,7 @@ function CreateOption({ Meta, SavedFields, onSaveFields }) {
           ))}
         </ul>
         <button onClick={() => onSaveFields(Fields)}>Save Settings</button>
+        <button onClick={() => onMediaSelect()}>Call Out</button>
       </div>
       <div className="wcmore-panel right">
         <DragDropContext onDragEnd={onDragEnd}>
