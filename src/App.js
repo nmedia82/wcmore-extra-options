@@ -37,9 +37,26 @@ function App() {
 
   const handleMediaSelect = () => {
     var i = 2;
-    window.handleWPMediaSelect(i, function (j) {
-      console.log(`${i} turned to ${j}`);
+
+    var frame = window.wcforce_get_wp_media();
+
+    frame.on("close", function () {
+      var selection = frame.state().get("selection");
+      if (!selection.length) {
+      }
     });
+
+    frame.on("select", function () {
+      var state = frame.state();
+      var selection = state.get("selection");
+      if (!selection) return;
+
+      selection.each(function (attachment) {
+        console.log(attachment.attributes);
+      });
+    });
+
+    frame.open();
   };
 
   return (
