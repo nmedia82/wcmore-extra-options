@@ -23,6 +23,10 @@ function App() {
     // setSelectedField(field);
   };
 
+  const CallMe = () => {
+    alert("hi");
+  };
+
   useEffect(() => {
     let metaObjs = [];
     for (let field of meta) {
