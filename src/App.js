@@ -36,24 +36,34 @@ function App() {
   }, []);
 
   const handleMediaSelect = () => {
-    var i = 2;
+    var wp_media_type = "image";
+    // if (field.type == 'audio') {
+    //     wp_media_type = 'audio,video';
+    // }
 
-    var frame = window.wcforce_get_wp_media();
+    const params = {
+      title: "Choose Images",
+      library: {
+        type: wp_media_type,
+      },
+      button: {
+        text: "Add Image",
+      },
+      multiple: true,
+    };
 
-    frame.on("close", function () {
-      var selection = frame.state().get("selection");
-      if (!selection.length) {
-      }
-    });
+    var frame = window.wcforce_get_wp_media(params);
+
+    // frame.on("close", function () {
+    //   var selection = frame.state().get("selection");
+    //   if (!selection.length) {
+    //   }
+    // });
 
     frame.on("select", function () {
-      var state = frame.state();
-      var selection = state.get("selection");
-      if (!selection) return;
-
-      selection.each(function (attachment) {
-        console.log(attachment.attributes);
-      });
+      var attachment = frame.state().get("selection").toJSON();
+      // var selection = state.get('selection');
+      console.log("select", attachment);
     });
 
     frame.open();
