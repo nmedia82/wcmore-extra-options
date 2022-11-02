@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/wcmore-extra-options/static/css/main.66bde8a1.css",
+    "main.js": "/wcmore-extra-options/static/js/main.d551eaee.js",
+    "static/js/787.aa9cc4ce.chunk.js": "/wcmore-extra-options/static/js/787.aa9cc4ce.chunk.js",
+    "index.html": "/wcmore-extra-options/index.html",
+    "main.66bde8a1.css.map": "/wcmore-extra-options/static/css/main.66bde8a1.css.map",
+    "main.d551eaee.js.map": "/wcmore-extra-options/static/js/main.d551eaee.js.map",
+    "787.aa9cc4ce.chunk.js.map": "/wcmore-extra-options/static/js/787.aa9cc4ce.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.66bde8a1.css",
+    "static/js/main.d551eaee.js"
+  ]
+}
