@@ -197,7 +197,7 @@ function CreateOption({ Meta, SavedFields, onSaveFields }) {
           style={customStyles}
           contentLabel="Example Modal"
         >
-          {JSON.stringify(SelectedField)}
+          {/* {JSON.stringify(SelectedField)} */}
           <header
             className="wcmore-header"
             ref={(_subtitle) => (subtitle = _subtitle)}
