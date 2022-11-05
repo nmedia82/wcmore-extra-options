@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
-import Input from "../fields/input";
-import Modal from "react-modal";
+
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import {
   wcmore_create_field_title,
@@ -8,20 +7,7 @@ import {
   wcmore_get_input_value,
 } from "../common/helper";
 import FieldItem from "./field-item";
-
-Modal.setAppElement("#wcforce-root");
-
-const customStyles = {
-  content: {
-    top: "30%",
-    left: "50%",
-    right: "auto",
-    bottom: "auto",
-    marginRight: "-50%",
-    transform: "translate(-50%, -50%)",
-    width: "80%",
-  },
-};
+import FieldModal from "./modal";
 
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list);
@@ -38,10 +24,9 @@ const reorder = (list, startIndex, endIndex) => {
 // });
 
 function CreateOption({ Meta, SavedFields, onSaveFields, onMediaSelect }) {
-  let subtitle;
   const [SelectedField, setSelectedField] = useState({});
   const [Fields, setFields] = useState([]);
-  const [modalIsOpen, setIsOpen] = useState(false);
+  const [modalMetaOpen, setMetaOpen] = useState(false);
 
   useEffect(() => {
     setFields(SavedFields);
@@ -49,17 +34,11 @@ function CreateOption({ Meta, SavedFields, onSaveFields, onMediaSelect }) {
 
   function openModal(field) {
     setSelectedField(field);
-    setIsOpen(true);
-  }
-
-  function afterOpenModal() {
-    // references are now sync'd and can be accessed.
-    subtitle.style.color = "#000";
-    // subtitle.text = SelectedField.label;
+    setMetaOpen(true);
   }
 
   function closeModal() {
-    setIsOpen(false);
+    setMetaOpen(false);
   }
 
   const addNewField = (meta) => {
@@ -90,17 +69,17 @@ function CreateOption({ Meta, SavedFields, onSaveFields, onMediaSelect }) {
         .toLowerCase()
         .replace(/[^a-z0-9]/g, "");
     }
-    console.log(selected_field);
+    // console.log(selected_field);
     setSelectedField(selected_field);
   };
 
   // saving single meta values
-  const saveSingleMeta = () => {
+  const handleFieldMetaSave = () => {
     const fields = [...Fields];
     let found = fields.find((f) => f._id === SelectedField._id);
     const index = fields.indexOf(found);
     fields[index] = SelectedField;
-    // console.log(fields);
+    console.log(fields);
     setFields(fields);
     closeModal();
   };
@@ -176,6 +155,7 @@ function CreateOption({ Meta, SavedFields, onSaveFields, onMediaSelect }) {
               >
                 {Fields.map((field, i) => (
                   <FieldItem
+                    key={field._id}
                     field={field}
                     index={i}
                     onOpenModal={openModal}
@@ -190,31 +170,15 @@ function CreateOption({ Meta, SavedFields, onSaveFields, onMediaSelect }) {
           </Droppable>
         </DragDropContext>
       </div>
+
       {SelectedField.meta !== undefined && (
-        <Modal
-          isOpen={modalIsOpen}
-          onAfterOpen={afterOpenModal}
-          onRequestClose={closeModal}
-          style={customStyles}
-          contentLabel="Example Modal"
-        >
-          {/* {JSON.stringify(SelectedField)} */}
-          <header
-            className="wcmore-header"
-            ref={(_subtitle) => (subtitle = _subtitle)}
-          >
-            {wcmore_create_field_title(SelectedField)}
-          </header>
-          <div className="wcmore-field-meta">
-            {SelectedField.meta.map((m, j) => (
-              <div key={`meta${j}`}>
-                <Input meta={m} onMetaChange={handleMetaChange} />
-              </div>
-            ))}
-          </div>
-          {/* <button onClick={closeModal}>Cancel</button> */}
-          <button onClick={saveSingleMeta}>Save & Close</button>
-        </Modal>
+        <FieldModal
+          SelectedField={SelectedField}
+          modalMetaOpen={modalMetaOpen}
+          onMetaChange={handleMetaChange}
+          onFieldMetaSave={handleFieldMetaSave}
+          onCloseModal={closeModal}
+        />
       )}
     </div>
   );

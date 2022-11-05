@@ -37,6 +37,43 @@
     ]
   },
   {
+    "label": "Images Options",
+    "details": "Choose imges from WP library",
+    "icon": "dropdown",
+    "meta": [
+      {
+        "name": "title",
+        "type": "text",
+        "title": "Field title",
+        "detail": ""
+      },
+      {
+        "name": "field_id",
+        "type": "text",
+        "title": "Field id",
+        "detail": "Unique field id"
+      },
+      {
+        "name": "description",
+        "type": "text",
+        "title": "Field description",
+        "detail": ""
+      },
+      {
+        "name": "is_required",
+        "type": "boolean",
+        "title": "Required?",
+        "detail": ""
+      },
+      {
+        "name": "options",
+        "type": "options",
+        "title": "Field options",
+        "detail": ""
+      }
+    ]
+  },
+  {
     "label": "Color Options",
     "details": "color options input",
     "icon": "dropdown",
