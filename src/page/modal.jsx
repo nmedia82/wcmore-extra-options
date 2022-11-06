@@ -1,6 +1,8 @@
 import Input from "../fields/input";
 import Modal from "react-modal";
 import { wcmore_create_field_title } from "../common/helper";
+import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+import "react-tabs/style/react-tabs.css";
 Modal.setAppElement("#wcforce-root");
 
 const customStyles = {
@@ -44,13 +46,27 @@ function FieldModal({
       >
         {wcmore_create_field_title(SelectedField)}
       </header>
-      <div className="wcmore-field-meta">
-        {SelectedField.meta.map((m, j) => (
-          <div key={`meta${j}`}>
-            <Input meta={m} onMetaChange={onMetaChange} />
+
+      <Tabs>
+        <TabList>
+          <Tab>General Settings</Tab>
+          <Tab>Conditions</Tab>
+        </TabList>
+
+        <TabPanel>
+          <div className="wcmore-field-meta">
+            {SelectedField.meta.map((m, j) => (
+              <div key={`meta${j}`}>
+                <Input meta={m} onMetaChange={onMetaChange} />
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+        </TabPanel>
+        <TabPanel>
+          <h2>Any content 2</h2>
+        </TabPanel>
+      </Tabs>
+
       {/* <button onClick={closeModal}>Cancel</button> */}
       <button onClick={onFieldMetaSave}>Save & Close</button>
     </Modal>
