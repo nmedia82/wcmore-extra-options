@@ -30,3 +30,12 @@ export function wcmore_create_field_title(field) {
     </span>
   );
 }
+
+export function wcforce_get_meta_default_value(meta) {
+  switch (meta.name) {
+    case "options":
+      return [];
+    default:
+      return "";
+  }
+}

@@ -15,7 +15,8 @@
     "react-scripts": "5.0.1",
     "react-tabs": "^5.1.0",
     "react-toastify": "^9.0.8",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "loader-utils": ">=2.0.3"
   },
   "scripts": {
     "predeploy": "npm run build",
@@ -44,6 +45,7 @@
     ]
   },
   "devDependencies": {
-    "gh-pages": "^4.0.0"
+    "gh-pages": "^4.0.0",
+    "loader-utils": ">=2.0.3"
   }
 }

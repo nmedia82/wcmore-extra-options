@@ -1,14 +1,30 @@
 [
   {
-    "label": "Select Options",
+    "label": "Field Options",
+    "type": "options",
     "details": "Select options input",
     "icon": "dropdown",
     "meta": [
       {
+        "name": "input",
+        "type": "select",
+        "title": "Input type",
+        "detail": "Select input type to display",
+        "options": [
+          "radio",
+          "checkbox",
+          "select",
+          "color",
+          "image",
+          "audio-video",
+          "timezone"
+        ]
+      },
+      {
         "name": "title",
         "type": "text",
         "title": "Field title",
-        "detail": ""
+        "detail": "Field title"
       },
       {
         "name": "field_id",
@@ -20,7 +36,7 @@
         "name": "description",
         "type": "text",
         "title": "Field description",
-        "detail": ""
+        "detail": "Field details"
       },
       {
         "name": "is_required",

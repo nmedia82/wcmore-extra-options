@@ -3,6 +3,7 @@ import Modal from "react-modal";
 import { wcmore_create_field_title } from "../common/helper";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
+import FieldOption from "./options/field-options";
 Modal.setAppElement("#wcforce-root");
 
 const customStyles = {
@@ -25,6 +26,9 @@ function FieldModal({
   modalMetaOpen,
 }) {
   let subtitle;
+
+  const { meta } = SelectedField;
+
   function afterOpenModal() {
     // references are now sync'd and can be accessed.
     subtitle.style.color = "#000";
@@ -51,11 +55,12 @@ function FieldModal({
         <TabList>
           <Tab>General Settings</Tab>
           <Tab>Conditions</Tab>
+          {SelectedField.type === "options" && <Tab>Options</Tab>}
         </TabList>
 
         <TabPanel>
           <div className="wcmore-field-meta">
-            {SelectedField.meta.map((m, j) => (
+            {meta.map((m, j) => (
               <div key={`meta${j}`}>
                 <Input meta={m} onMetaChange={onMetaChange} />
               </div>
@@ -65,6 +70,12 @@ function FieldModal({
         <TabPanel>
           <h2>Any content 2</h2>
         </TabPanel>
+
+        {SelectedField.type === "options" && (
+          <TabPanel>
+            <FieldOption meta={meta} />
+          </TabPanel>
+        )}
       </Tabs>
 
       {/* <button onClick={closeModal}>Cancel</button> */}

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import {
-  wcmore_create_field_title,
+  wcforce_get_meta_default_value,
   wcmore_get_field_id,
   wcmore_get_input_value,
 } from "../common/helper";
@@ -41,15 +41,26 @@ function CreateOption({ Meta, SavedFields, onSaveFields, onMediaSelect }) {
     setMetaOpen(false);
   }
 
-  const addNewField = (meta) => {
-    // A Deep copy of meta object to unlink from Meta Objects
-    let field = JSON.parse(JSON.stringify(meta));
-    field = { ...field, _id: wcmore_get_field_id(), status: true };
-    const fields = [...Fields, field];
+  const addNewField = (field) => {
+    /* when a field is copied following two keys are added to  field
+     ** 1. _id, 2. status
+     ** Also 'value' added to field meta
+     */
+
+    field.meta = field.meta.map(
+      (m) => (m = { ...m, value: wcforce_get_meta_default_value(m) })
+    );
+    let new_field = {
+      ...field,
+      _id: wcmore_get_field_id(),
+      status: true,
+    };
+    const fields = [...Fields, new_field];
+    console.log(field, new_field);
     setFields(fields);
     // const last = fields[fields.length - 1];
     // setSelectedField(field);
-    openModal(field);
+    openModal(new_field);
   };
 
   const handleMetaChange = (e, setting) => {
@@ -61,6 +72,11 @@ function CreateOption({ Meta, SavedFields, onSaveFields, onMediaSelect }) {
     let index = selected_field.meta.indexOf(found);
     selected_field.meta[index] = setting;
 
+    // set input_type of field from meta 'input'
+    if (setting.name === "input") {
+      selected_field.input_type = setting.value;
+    }
+
     // setting field id
     if (setting.name === "title") {
       found = selected_field.meta.find((m) => m.name === "field_id");
@@ -69,7 +85,7 @@ function CreateOption({ Meta, SavedFields, onSaveFields, onMediaSelect }) {
         .toLowerCase()
         .replace(/[^a-z0-9]/g, "");
     }
-    // console.log(selected_field);
+    console.log(selected_field);
     setSelectedField(selected_field);
   };
 

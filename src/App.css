@@ -82,3 +82,7 @@ ul.wcmore-meta-fields li {
   align-items: stretch;
   width: 50%;
 }
+
+.wcforce-create-option {
+  text-align: center;
+}

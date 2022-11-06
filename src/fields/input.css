@@ -2,3 +2,17 @@ input.wcmore-input {
   width: 90%;
   height: 1.6em;
 }
+
+/* select input */
+select.wcmore-input {
+  width: 90%;
+  height: 1.9em;
+}
+
+.wcforce-meta-option-row {
+  display: flex;
+}
+
+.wcforce-option-single.id {
+  flex-shrink: 3;
+}
