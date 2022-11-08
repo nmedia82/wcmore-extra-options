@@ -33,13 +33,6 @@ ul.wcmore-meta-fields li {
   margin-bottom: 15px;
 }
 
-.wcmore-field-settings {
-  /* display: flex;
-  flex-wrap: wrap;
-  justify-content: stretch; */
-  /* padding: 10px; */
-}
-
 .wcmore-field-settings > div {
   padding: 8px;
   margin: 1px auto;
@@ -85,4 +78,35 @@ ul.wcmore-meta-fields li {
 
 .wcforce-create-option {
   text-align: center;
+  margin: 10px 0;
+}
+
+.wcforce-img-placeholder {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid;
+  margin: 4px 4px 4px 0;
+  cursor: pointer;
+}
+
+.wcforce-conditions-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wcforce-conditions {
+  min-height: 70vh;
+  border: 1px #000 solid;
+  background-color: gold;
+  flex: 1;
+  padding: 5px;
+}
+
+.wcforce-conditions.right {
+  flex: 5;
+  margin-left: 0.5em;
 }

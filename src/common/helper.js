@@ -20,13 +20,13 @@ export function wcmore_get_field_id() {
 
 export function wcmore_create_field_title(field) {
   let title = "New Field";
-  const meta_title = field.meta.find((m) => m.name === "title");
+  const meta_title = field.title;
   if (meta_title) {
-    title = `${meta_title.value}`;
+    title = `${meta_title}`;
   }
   return (
     <span>
-      {title} <small>{`(${field.label})`}</small>
+      {title} <small>{`(${field.input_type})`}</small>
     </span>
   );
 }
@@ -37,5 +37,24 @@ export function wcforce_get_meta_default_value(meta) {
       return [];
     default:
       return "";
+  }
+}
+
+// return option schema based option type
+export function wcforce_generate_option_schema(input_type) {
+  const option_schema = {
+    label: "",
+    price: "",
+    weight: "",
+    discount: "",
+    stock: "",
+    option_id: "",
+  };
+  switch (input_type) {
+    case "image":
+      delete option_schema.label;
+      return { image: "", ...option_schema };
+    default:
+      return option_schema;
   }
 }

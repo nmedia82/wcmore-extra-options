@@ -1,6 +1,6 @@
 const Text = ({ meta, onMetaChange }) => {
   return (
-    <p>
+    <div className="wcforce-field-wrapper">
       <input
         type="text"
         name={meta.name}
@@ -12,7 +12,7 @@ const Text = ({ meta, onMetaChange }) => {
       />
       <br />
       <small>{meta.detail}</small>
-    </p>
+    </div>
   );
 };
 

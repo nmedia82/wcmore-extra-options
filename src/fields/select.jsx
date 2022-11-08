@@ -1,6 +1,6 @@
 const Select = ({ meta, onMetaChange }) => {
   return (
-    <p>
+    <div className="wcforce-field-wrapper">
       <select
         name={meta.name}
         id={meta.name}
@@ -17,7 +17,7 @@ const Select = ({ meta, onMetaChange }) => {
       </select>
       <br />
       <small>{meta.detail}</small>
-    </p>
+    </div>
   );
 };
 

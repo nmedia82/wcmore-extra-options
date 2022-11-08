@@ -2,24 +2,34 @@ import Text from "./../../fields/text";
 import Boolean from "./../../fields/boolean";
 import "./../../fields/input.css";
 import Select from "./../../fields/select";
-import { wcmore_get_field_id } from "../../common/helper";
 
 function Option({ option, onOptionMetaChange }) {
   const get_option_meta = (k) => {
+    const value = option[k];
     switch (k) {
       case "image":
         return {
-          name: wcmore_get_field_id(),
+          name: k,
           type: "option_image",
-          title: option[k],
-          value: "",
+          title: k,
+          value: value,
+        };
+      // these two is for conditions rules options
+      case "field":
+      case "operator":
+        return {
+          name: k,
+          type: "select",
+          title: k,
+          options: value,
         };
       default:
         return {
-          name: wcmore_get_field_id(),
+          name: k,
           type: "text",
-          title: option[k],
-          value: "",
+          title: k,
+          value: value,
+          row_id: option["option_id"],
         };
     }
   };
@@ -32,6 +42,8 @@ function Option({ option, onOptionMetaChange }) {
         return <Boolean meta={meta} onMetaChange={onOptionMetaChange} />;
       case "select":
         return <Select meta={meta} onMetaChange={onOptionMetaChange} />;
+      case "option_image":
+        return <span className="wcforce-img-placeholder">M</span>;
 
       default:
         return "";

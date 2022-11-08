@@ -55,8 +55,9 @@ function CreateOption({ Meta, SavedFields, onSaveFields, onMediaSelect }) {
       _id: wcmore_get_field_id(),
       status: true,
     };
+    if (field.type === "options") new_field.options = [];
     const fields = [...Fields, new_field];
-    console.log(field, new_field);
+    // console.log(field, new_field);
     setFields(fields);
     // const last = fields[fields.length - 1];
     // setSelectedField(field);
@@ -85,17 +86,30 @@ function CreateOption({ Meta, SavedFields, onSaveFields, onMediaSelect }) {
         .toLowerCase()
         .replace(/[^a-z0-9]/g, "");
     }
-    console.log(selected_field);
     setSelectedField(selected_field);
   };
 
   // saving single meta values
   const handleFieldMetaSave = () => {
+    // extract savable data from field meta, delete unnecessary keys
+    let field = { ...SelectedField };
+    const field_meta = [...field.meta];
+    delete field.details;
+    delete field.label;
+    delete field.icon;
+    // delete field.meta;
+    for (let meta of field_meta) {
+      if (!["options", "input"].includes(meta.name))
+        field[meta.name] = meta.value;
+      // field = { ...field, meta[name]:meta.value };
+    }
+    console.log(field);
+
     const fields = [...Fields];
-    let found = fields.find((f) => f._id === SelectedField._id);
+    let found = fields.find((f) => f._id === field._id);
     const index = fields.indexOf(found);
-    fields[index] = SelectedField;
-    console.log(fields);
+    fields[index] = field;
+    // console.log(field, fields);
     setFields(fields);
     closeModal();
   };
@@ -144,8 +158,20 @@ function CreateOption({ Meta, SavedFields, onSaveFields, onMediaSelect }) {
 
     setFields(fields);
   }
-  // handleMove
-  // https://codesandbox.io/s/reorder-draggable-list-array-forked-xtpgch?file=/src/App.js:682-752
+
+  const handleFieldOptionChange = (options) => {
+    const selected_field = { ...SelectedField };
+    selected_field.options = options;
+    // console.log(selected_field);
+    setSelectedField(selected_field);
+  };
+
+  const handleConditionUpdate = (conditions) => {
+    const selected_field = { ...SelectedField };
+    selected_field.conditions = conditions;
+    console.log(selected_field);
+    setSelectedField(selected_field);
+  };
 
   return (
     <div id="wcmore-productoptions">
@@ -189,11 +215,14 @@ function CreateOption({ Meta, SavedFields, onSaveFields, onMediaSelect }) {
 
       {SelectedField.meta !== undefined && (
         <FieldModal
+          SavedFields={SavedFields}
           SelectedField={SelectedField}
           modalMetaOpen={modalMetaOpen}
           onMetaChange={handleMetaChange}
           onFieldMetaSave={handleFieldMetaSave}
           onCloseModal={closeModal}
+          onConditionUpdate={handleConditionUpdate}
+          onFieldOptionChange={handleFieldOptionChange}
         />
       )}
     </div>

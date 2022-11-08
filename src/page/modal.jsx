@@ -4,14 +4,17 @@ import { wcmore_create_field_title } from "../common/helper";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import FieldOption from "./options/field-options";
+import "./modal.css";
+import ConditionSettings from "./conditions/conditions";
 Modal.setAppElement("#wcforce-root");
 
 const customStyles = {
   content: {
-    top: "30%",
-    left: "50%",
+    top: "50%",
     right: "auto",
-    bottom: "auto",
+    left: "50%",
+    height: "90%",
+    // bottom: "auto",
     marginRight: "-50%",
     transform: "translate(-50%, -50%)",
     width: "80%",
@@ -19,15 +22,18 @@ const customStyles = {
 };
 
 function FieldModal({
+  SavedFields,
   SelectedField,
   onMetaChange,
   onFieldMetaSave,
   onCloseModal,
   modalMetaOpen,
+  onConditionUpdate,
+  onFieldOptionChange,
 }) {
   let subtitle;
 
-  const { meta } = SelectedField;
+  const { meta, options, input_type } = SelectedField;
 
   function afterOpenModal() {
     // references are now sync'd and can be accessed.
@@ -68,12 +74,20 @@ function FieldModal({
           </div>
         </TabPanel>
         <TabPanel>
-          <h2>Any content 2</h2>
+          <ConditionSettings
+            SavedFields={SavedFields}
+            field={SelectedField}
+            onConditionUpdate={onConditionUpdate}
+          />
         </TabPanel>
 
         {SelectedField.type === "options" && (
           <TabPanel>
-            <FieldOption meta={meta} />
+            <FieldOption
+              options={options}
+              input_type={input_type}
+              onFieldOptionChange={onFieldOptionChange}
+            />
           </TabPanel>
         )}
       </Tabs>

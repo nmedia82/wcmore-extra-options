@@ -4,6 +4,7 @@
     "type": "options",
     "details": "Select options input",
     "icon": "dropdown",
+    "conditions": { "status": false, "rules": [] },
     "meta": [
       {
         "name": "input",
