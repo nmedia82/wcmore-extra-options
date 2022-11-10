@@ -49,6 +49,8 @@ export function wcforce_generate_option_schema(input_type) {
     discount: "",
     stock: "",
     option_id: "",
+    icon_delete: "",
+    icon_clone: "",
   };
   switch (input_type) {
     case "image":
@@ -56,5 +58,22 @@ export function wcforce_generate_option_schema(input_type) {
       return { image: "", ...option_schema };
     default:
       return option_schema;
+  }
+}
+
+// getting default options for Options and Conditions options
+export function wcforce_get_default_options(key, SavedFields) {
+  switch (key) {
+    // all operators for conditions
+    case "operator":
+      return ["is", "not", "greater than", "less than"];
+    // all field titles for conditions
+    case "field":
+      return SavedFields.map((value) => value.title).filter(
+        (v) => v !== undefined
+      );
+
+    default:
+      return [];
   }
 }

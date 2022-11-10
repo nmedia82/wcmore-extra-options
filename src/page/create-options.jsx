@@ -101,7 +101,6 @@ function CreateOption({ Meta, SavedFields, onSaveFields, onMediaSelect }) {
     for (let meta of field_meta) {
       if (!["options", "input"].includes(meta.name))
         field[meta.name] = meta.value;
-      // field = { ...field, meta[name]:meta.value };
     }
     console.log(field);
 
@@ -215,7 +214,7 @@ function CreateOption({ Meta, SavedFields, onSaveFields, onMediaSelect }) {
 
       {SelectedField.meta !== undefined && (
         <FieldModal
-          SavedFields={SavedFields}
+          SavedFields={Fields}
           SelectedField={SelectedField}
           modalMetaOpen={modalMetaOpen}
           onMetaChange={handleMetaChange}

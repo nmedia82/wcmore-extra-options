@@ -1,3 +1,4 @@
+import { CopyIcon, XCircleFillIcon } from "@primer/octicons-react";
 import { useState, useEffect } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import {
@@ -73,6 +74,14 @@ function FieldOption({ options, input_type, onFieldOptionChange }) {
 
     onFieldOptionChange(options);
   }
+
+  const handleIconClick = (event, option) => {
+    if (event === "delete") {
+      onOptionDelete(option);
+    } else if (event === "clone") {
+      onOptionClone(option);
+    }
+  };
   return (
     <div>
       <div className="wcforce-create-option">
@@ -101,21 +110,10 @@ function FieldOption({ options, input_type, onFieldOptionChange }) {
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
                       >
-                        <span
-                          className="wcmore-field-setting clone"
-                          onClick={() => onOptionClone(option)}
-                        >
-                          Clone
-                        </span>
-                        <span
-                          className="wcmore-field-setting delete"
-                          onClick={() => onOptionDelete(option)}
-                        >
-                          Delete
-                        </span>
                         <Option
                           option={option}
                           onOptionMetaChange={handleOptionMetaChange}
+                          onIconClick={handleIconClick}
                         />
                       </div>
                     )}
