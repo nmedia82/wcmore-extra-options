@@ -12,6 +12,7 @@
         "title": "Input type",
         "detail": "Select input type to display",
         "options": [
+          "Select Type",
           "radio",
           "checkbox",
           "select",
@@ -54,15 +55,23 @@
     ]
   },
   {
-    "label": "Images Options",
-    "details": "Choose imges from WP library",
+    "label": "Text, Numbers",
+    "type": "text",
+    "details": "Regular text input",
     "icon": "dropdown",
     "meta": [
+      {
+        "name": "input",
+        "type": "select",
+        "title": "Input type",
+        "detail": "Select input type to display",
+        "options": ["Select Type", "text", "number", "email", "url"]
+      },
       {
         "name": "title",
         "type": "text",
         "title": "Field title",
-        "detail": ""
+        "detail": "Title for display"
       },
       {
         "name": "field_id",
@@ -74,18 +83,12 @@
         "name": "description",
         "type": "text",
         "title": "Field description",
-        "detail": ""
+        "detail": "Field description render after title"
       },
       {
         "name": "is_required",
         "type": "boolean",
         "title": "Required?",
-        "detail": ""
-      },
-      {
-        "name": "options",
-        "type": "options",
-        "title": "Field options",
         "detail": ""
       }
     ]

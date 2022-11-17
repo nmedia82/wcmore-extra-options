@@ -86,6 +86,8 @@ function CreateOption({ Meta, SavedFields, onSaveFields, onMediaSelect }) {
         .toLowerCase()
         .replace(/[^a-z0-9]/g, "");
     }
+
+    console.log(selected_field);
     setSelectedField(selected_field);
   };
 
@@ -102,7 +104,7 @@ function CreateOption({ Meta, SavedFields, onSaveFields, onMediaSelect }) {
       if (!["options", "input"].includes(meta.name))
         field[meta.name] = meta.value;
     }
-    console.log(field);
+    // console.log(field);
 
     const fields = [...Fields];
     let found = fields.find((f) => f._id === field._id);
