@@ -24,7 +24,7 @@ export class FieldClass {
   label() {
     if (this.field.title) {
       return (
-        <label for={this.id()} className={this.label_class()}>
+        <label htmlFor={this.id()} className={this.label_class()}>
           {this.field.title}
         </label>
       );

@@ -1,6 +1,7 @@
 const Checkbox = ({ field, FieldObj, onFieldChange }) => {
   return (
     <>
+      {FieldObj.label()}
       {field.options.map((option) => (
         <label key={option.option_id}>
           <input
