@@ -11,6 +11,9 @@ const Field = ({ field, onFieldChange }) => {
   // console.log(FieldObj);
   // FieldObj.input_attributes();
   switch (field.input_type) {
+    case "email":
+    case "number":
+    case "url":
     case "text":
       return (
         <Text field={field} FieldObj={FieldObj} onFieldChange={onFieldChange} />

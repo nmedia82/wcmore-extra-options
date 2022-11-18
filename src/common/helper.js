@@ -69,7 +69,7 @@ export function wcforce_get_default_options(key, SavedFields) {
       return ["is", "not", "greater than", "less than"];
     // all field titles for conditions
     case "field":
-      return SavedFields.map((value) => value.title).filter(
+      return SavedFields.map((value) => value.field_id).filter(
         (v) => v !== undefined
       );
 

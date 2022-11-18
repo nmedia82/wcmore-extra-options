@@ -45,5 +45,16 @@
         To begin the development, run `npm start` or `yarn start`.
         To create a production bundle, use `npm run build` or `yarn build`.
       -->
+
+    <script type="text/javascript">
+      function wcforce_call_wp(fn, callback) {
+        const resp = window[fn]();
+        callback(resp);
+      }
+
+      function wcforce_get_images() {
+        return { id: 3, id: 4 };
+      }
+    </script>
   </body>
 </html>

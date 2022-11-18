@@ -1,11 +1,11 @@
-import { wcforce_get_field_label_class } from "../common/helper";
-
 export class FieldClass {
   constructor(field) {
     this.field = field;
   }
 
   name() {
+    if (this.input_type() === "checkbox")
+      return `wcforce[][${this.field.field_id}][]`;
     return `wcforce[][${this.field.field_id}]`;
   }
   id() {
@@ -16,9 +16,12 @@ export class FieldClass {
     if (this.field.type === "text") placeholder = this.field.title;
     return placeholder;
   }
+  input_type() {
+    return this.field.input_type;
+  }
 
   class() {
-    return `cforce-field ${this.field.id} ${this.field.input_type}`;
+    return `wcforce-field ${this.field.field_id} ${this.field.input_type}`;
   }
 
   label() {

@@ -34,6 +34,10 @@ function App() {
   }, []);
 
   const handleMediaSelect = () => {
+    window.wcforce_call_wp("wcforce_get_images", function (resp) {
+      console.log(resp);
+    });
+    return;
     var wp_media_type = "image";
     // if (field.type == 'audio') {
     //     wp_media_type = 'audio,video';

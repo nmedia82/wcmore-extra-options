@@ -59,6 +59,7 @@
     "type": "text",
     "details": "Regular text input",
     "icon": "dropdown",
+    "conditions": { "status": false, "rules": [] },
     "meta": [
       {
         "name": "input",

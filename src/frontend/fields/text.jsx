@@ -3,7 +3,7 @@ const Text = ({ field, FieldObj, onFieldChange }) => {
     <>
       {FieldObj.label()}
       <input
-        type="text"
+        type={FieldObj.input_type()}
         name={FieldObj.name()}
         id={FieldObj.id()}
         placeholder={FieldObj.placeholder()}

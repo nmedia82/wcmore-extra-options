@@ -19,9 +19,9 @@ function ConditionSettings({ SavedFields, field, onConditionUpdate }) {
   const handleChange = (e) => {
     const name = e.target.name;
     let value = e.target.value;
-    if (name === "status" && e.target.checked) value = e.target.checked;
+    if (name === "status") value = e.target.checked;
     const condition = { ...Condition, [name]: value };
-    console.log(name, value, condition);
+    // console.log(name, value, condition);
     setCondition(condition);
     onConditionUpdate(condition);
   };
@@ -40,7 +40,7 @@ function ConditionSettings({ SavedFields, field, onConditionUpdate }) {
     ];
     // console.log(rules);
     // setRules(rules);
-    // console.log(condition);
+    console.log(condition);
     setCondition(condition);
     onConditionUpdate(condition);
   };
@@ -141,15 +141,13 @@ function ConditionSettings({ SavedFields, field, onConditionUpdate }) {
       <div className="wcforce-conditions right">
         {rules.map((rule, i) => {
           return (
-            <>
-              <Option
-                key={i}
-                option={rule}
-                SavedFields={SavedFields}
-                onOptionMetaChange={handleOptionMetaChange}
-                onIconClick={handleIconClick}
-              />
-            </>
+            <Option
+              key={i}
+              option={rule}
+              SavedFields={SavedFields}
+              onOptionMetaChange={handleOptionMetaChange}
+              onIconClick={handleIconClick}
+            />
           );
         })}
       </div>
