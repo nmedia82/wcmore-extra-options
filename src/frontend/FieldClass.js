@@ -1,6 +1,7 @@
 export class FieldClass {
-  constructor(field) {
+  constructor(field, conditionally_bound = null) {
     this.field = field;
+    this.conditionally_bound = conditionally_bound;
   }
 
   name() {
@@ -21,7 +22,11 @@ export class FieldClass {
   }
 
   class() {
-    return `wcforce-field ${this.field.field_id} ${this.field.input_type}`;
+    let classname = `wcforce-field ${this.field.field_id} ${this.field.input_type}`;
+    if (this.conditionally_bound.includes(this.id())) {
+      classname += " conditionally-bound";
+    }
+    return classname;
   }
 
   label() {

@@ -6,9 +6,8 @@ import Select from "./fields/select";
 import Checkbox from "./fields/checkbox";
 import Radio from "./fields/radio";
 
-const Field = ({ field, onFieldChange }) => {
-  const FieldObj = new FieldClass(field);
-  // console.log(FieldObj);
+const Field = ({ field, onFieldChange, ConditionallyBound }) => {
+  const FieldObj = new FieldClass(field, ConditionallyBound);
   // FieldObj.input_attributes();
   switch (field.input_type) {
     case "email":
