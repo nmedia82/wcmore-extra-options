@@ -5,6 +5,7 @@ import Boolean from "./fields/boolean";
 import Select from "./fields/select";
 import Checkbox from "./fields/checkbox";
 import Radio from "./fields/radio";
+import AutoComplete from "./fields/material/autocomplete" 
 
 const Field = ({ field, onFieldChange, ConditionallyBound }) => {
   const FieldObj = new FieldClass(field, ConditionallyBound);
@@ -50,6 +51,13 @@ const Field = ({ field, onFieldChange, ConditionallyBound }) => {
           onFieldChange={onFieldChange}
         />
       );
+
+    case "autocomplete":
+    return <AutoComplete
+    field={field}
+          FieldObj={FieldObj}
+          onFieldChange={onFieldChange}
+    />
 
     default:
       return "";

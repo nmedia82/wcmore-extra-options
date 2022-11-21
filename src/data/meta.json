@@ -15,6 +15,7 @@
           "Select Type",
           "radio",
           "checkbox",
+          "autocomplete",
           "select",
           "color",
           "image",

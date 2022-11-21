@@ -1,3 +1,5 @@
+import { TextField } from "@mui/material";
+
 const Text = ({ field, FieldObj, onFieldChange }) => {
   return (
     <>
@@ -14,6 +16,8 @@ const Text = ({ field, FieldObj, onFieldChange }) => {
       />
       <br />
       <small>{field.description}</small>
+      <TextField id="outlined-basic" label="Outlined" variant="outlined" />
+
     </>
   );
 };
