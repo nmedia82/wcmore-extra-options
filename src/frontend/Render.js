@@ -17,24 +17,26 @@ function Render() {
     const filter = fields
       .filter((f) => f.status)
       .map((f) => ({ ...f, is_hidden: is_conditionally_hidden(f) }));
-    let conditions = [];
+    let conditions = {};
     let conditionally_bound = [];
     for (let field of filter) {
-      conditions[field.field_id] = field.conditions;
+      if (!field.conditions.status) continue;
+      conditions = { ...conditions, [field.field_id]: field.conditions };
       conditionally_bound = [
         ...conditionally_bound,
         ...field.conditions.rules.map((r) => r.field),
       ];
     }
 
-    // getting unice conditionally_bound
+    // getting uniqe conditionally_bound
     conditionally_bound = conditionally_bound.filter(
       (value, index, self) => self.indexOf(value) === index
     );
 
+    setConditions(conditions);
     setConditionallyBound(conditionally_bound);
 
-    // console.log(filter, conditionally_bound);
+    // console.log(filter, conditions, conditionally_bound);
     setFields(filter);
   }, []);
 
@@ -51,29 +53,70 @@ function Render() {
       value = e.target.value;
     }
 
+    user_data = { ...UserData, [e.target.id]: value };
+
     // if conditionally bound
     if (ConditionallyBound.includes(meta.field_id)) {
       // console.log(is_conditionally_hidden(meta));
       const fields = [...Fields];
-      const found = fields.find((f) => f.field_id === meta.field_id);
-      const index = fields.indexOf(found);
-      fields[index].is_hidden = true;
-      setFields(fields);
+      console.log(Conditions);
+      for (let field_id in Conditions) {
+        // console.log(field_id);
+        const found = fields.find((f) => f.field_id === field_id);
+        const index = fields.indexOf(found);
+        fields[index].is_hidden = is_conditionally_hidden(found, user_data);
+        console.log(fields[index]);
+        setFields(fields);
+      }
     }
-    user_data = { ...UserData, [e.target.id]: value };
-
     console.log(user_data);
     setUserData(user_data);
   };
 
-  const is_conditionally_hidden = (field) => {
-    const { bound, rules, status, visibility } = field.conditions;
-    if (status) {
-      if (bound === "all" && rules.length === 1) return true;
+  const is_conditionally_hidden = (f, user_values = {}) => {
+    const { bound, rules, status, visibility } = f.conditions;
+    if (!status) return false;
+    const _true = visibility === "show" ? false : true;
+    // console.log(rules.length === matched_rules(rules, user_values), !_true);
+    if (bound === "all" && rules.length === matched_rules(rules, user_values)) {
+      return _true;
     }
-
-    return false;
+    if (bound === "any" && 0 < matched_rules(rules, user_values)) {
+      return _true;
+    }
+    return !_true;
   };
+
+  const matched_rules = (rules, user_values) => {
+    let matched_rules = 0;
+    for (let rule of rules) {
+      // console.log(rules);
+      const { field, operator, value } = rule;
+      // console.log(`${user_values[field]} === ${value}`);
+      // array values
+      if (typeof user_values[field] === "object") {
+        if (operator === "is" && user_values[field].includes(value))
+          matched_rules++;
+        if (operator === "not" && !user_values[field].includes(value))
+          matched_rules++;
+      } else {
+        if (operator === "is" && user_values[field] === value) matched_rules++;
+        if (operator === "not" && user_values[field] !== value) matched_rules++;
+        if (
+          operator === "greater than" &&
+          Number(user_values[field]) > Number(value)
+        )
+          matched_rules++;
+        if (
+          operator === "less than" &&
+          Number(user_values[field]) < Number(value)
+        )
+          matched_rules++;
+      }
+    }
+    return matched_rules;
+  };
+
   const getWrapperClass = (field) => {
     let classname = `wcforce-field-wrapper ${field.type} ${field.field_id}`;
     if (field.is_hidden) {
