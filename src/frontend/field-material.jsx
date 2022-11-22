@@ -2,10 +2,11 @@ import { FieldClass } from "./FieldClass";
 import Text from "./fields/material/text";
 import Boolean from "./fields/boolean";
 // import "./fields/input.css";
-import Select from "./fields/select";
+
 import Checkbox from "./fields/checkbox";
 import Radio from "./fields/radio";
 import AutoComplete from "./fields/material/autocomplete";
+import SelectMaterial from "./fields/material/select";
 
 const FieldMaterial = ({ field, onFieldChange, ConditionallyBound }) => {
   const FieldObj = new FieldClass(field, ConditionallyBound);
@@ -28,7 +29,7 @@ const FieldMaterial = ({ field, onFieldChange, ConditionallyBound }) => {
       );
     case "select":
       return (
-        <Select
+        <SelectMaterial
           field={field}
           FieldObj={FieldObj}
           onFieldChange={onFieldChange}

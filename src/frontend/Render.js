@@ -1,15 +1,17 @@
 import { useState, useEffect } from "react";
 import "./Render.css";
 import settings from "./../data/settings.json";
+import { FieldClass } from "./FieldClass";
 import Field from "./field";
 import FieldMaterial from "./field-material";
 import { Grid, Paper, styled } from "@mui/material";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
+  // backgroundColor: "#ffe4c4",
   ...theme.typography.body2,
   padding: theme.spacing(1),
-  textAlign: "center",
+  textAlign: "left",
   color: theme.palette.text.secondary,
 }));
 
@@ -51,10 +53,10 @@ function Render() {
   }, []);
 
   const handleFieldChange = (e, meta) => {
-    // console.log(e, setting);
+    console.log(e, meta);
     let user_data = "";
     let value = "";
-    if (e.target.type === "checkbox") {
+    if (meta.input_type === "checkbox") {
       value = [
         ...document.querySelectorAll(`.${meta.field_id}.wcforce-field:checked`),
       ].map((c) => c.value);
@@ -63,12 +65,19 @@ function Render() {
       value = e.target.value;
     }
 
-    user_data = { ...UserData, [e.target.id]: value };
+    user_data = { ...UserData, [meta.field_id]: value };
+
+    // updating value of current field
+    const fields = [...Fields];
+    const found = fields.find((f) => f.field_id === meta.field_id);
+    const index = fields.indexOf(found);
+    fields[index].value = value;
+
+    // console.log(fields[index]);
 
     // if conditionally bound
     if (ConditionallyBound.includes(meta.field_id)) {
       // console.log(is_conditionally_hidden(meta));
-      const fields = [...Fields];
       console.log(Conditions);
       for (let field_id in Conditions) {
         // console.log(field_id);
@@ -76,9 +85,10 @@ function Render() {
         const index = fields.indexOf(found);
         fields[index].is_hidden = is_conditionally_hidden(found, user_data);
         console.log(fields[index]);
-        setFields(fields);
       }
     }
+
+    setFields(fields);
     console.log(user_data);
     setUserData(user_data);
   };
@@ -138,31 +148,39 @@ function Render() {
   return (
     <div className="wcforce-extra-fields-wrapper">
       {settings.ui === "normal" &&
-        Fields.map((field) => (
-          <div key={field._id} className={getWrapperClass(field)}>
-            <Field
-              field={field}
-              onFieldChange={handleFieldChange}
-              ConditionallyBound={ConditionallyBound}
-            />
-          </div>
-        ))}
+        Fields.map((field) => {
+          const FieldObj = new FieldClass(field, ConditionallyBound);
+          return (
+            <div key={field._id} className={getWrapperClass(field)}>
+              <Field
+                field={field}
+                onFieldChange={handleFieldChange}
+                ConditionallyBound={ConditionallyBound}
+                FieldObj={FieldObj}
+              />
+            </div>
+          );
+        })}
 
       {settings.ui === "material" && (
         <Grid container spacing={0}>
-          {Fields.map((field) => (
-            <Grid key={field._id} item xs={Number(field.col)}>
-              <div className={getWrapperClass(field)}>
-                <Item>
-                  <FieldMaterial
-                    field={field}
-                    onFieldChange={handleFieldChange}
-                    ConditionallyBound={ConditionallyBound}
-                  />
-                </Item>
-              </div>
-            </Grid>
-          ))}
+          {Fields.map((field) => {
+            const FieldObj = new FieldClass(field, ConditionallyBound);
+            return (
+              <Grid key={field._id} item xs={FieldObj.col()}>
+                <div className={getWrapperClass(field)}>
+                  <Item>
+                    <FieldMaterial
+                      field={field}
+                      onFieldChange={handleFieldChange}
+                      ConditionallyBound={ConditionallyBound}
+                      FieldObj={FieldObj}
+                    />
+                  </Item>
+                </div>
+              </Grid>
+            );
+          })}
         </Grid>
       )}
     </div>

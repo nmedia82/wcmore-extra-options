@@ -1,4 +1,5 @@
 import {
+  FormControl,
   TextField,
   Tooltip,
   InputAdornment,
@@ -6,15 +7,15 @@ import {
 } from "@mui/material";
 const Text = ({ field, FieldObj, onFieldChange }) => {
   return (
-    <>
+    <FormControl fullWidth>
       <Tooltip title={FieldObj.description()}>
         <TextField
-          fullWidth
           name={FieldObj.name()}
           id={FieldObj.id()}
           label={FieldObj.label()}
-          variant="outlined"
+          value={field.value}
           onChange={(e) => onFieldChange(e, field)}
+          variant="outlined"
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">kg</InputAdornment>
@@ -22,8 +23,10 @@ const Text = ({ field, FieldObj, onFieldChange }) => {
           }}
         />
       </Tooltip>
-      <FormHelperText id="outlined-weight-helper-text">Weight</FormHelperText>
-    </>
+      <FormHelperText id="outlined-weight-helper-text">
+        {FieldObj.description()}
+      </FormHelperText>
+    </FormControl>
   );
 };
 

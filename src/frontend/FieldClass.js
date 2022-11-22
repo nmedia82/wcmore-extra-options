@@ -23,6 +23,15 @@ export class FieldClass {
   input_type() {
     return this.field.input_type;
   }
+  default_value() {
+    return this.field.value !== undefined ? this.field.value : "";
+  }
+  options() {
+    return this.field.options !== undefined ? this.field.options : [];
+  }
+  col() {
+    return this.field.col !== "" ? Number(this.field.col) : 12;
+  }
 
   class() {
     let classname = `wcforce-field ${this.field.field_id} ${this.field.input_type}`;
