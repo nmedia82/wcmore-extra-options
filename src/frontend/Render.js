@@ -1,11 +1,21 @@
 import { useState, useEffect } from "react";
 import "./Render.css";
-import useLocalStorage from "../common/useLocalStorage";
+import settings from "./../data/settings.json";
 import Field from "./field";
-import { wcmore_get_input_value } from "../common/helper";
+import FieldMaterial from "./field-material";
+import { Grid, Paper, styled } from "@mui/material";
+
+const Item = styled(Paper)(({ theme }) => ({
+  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: "center",
+  color: theme.palette.text.secondary,
+}));
 
 const fields = JSON.parse(localStorage.getItem("wcmore_fields"));
 
+console.log(settings);
 function Render() {
   const [Fields, setFields] = useState([]);
   const [Conditions, setConditions] = useState([]);
@@ -127,15 +137,34 @@ function Render() {
 
   return (
     <div className="wcforce-extra-fields-wrapper">
-      {Fields.map((field) => (
-        <div key={field._id} className={getWrapperClass(field)}>
-          <Field
-            field={field}
-            onFieldChange={handleFieldChange}
-            ConditionallyBound={ConditionallyBound}
-          />
-        </div>
-      ))}
+      {settings.ui === "normal" &&
+        Fields.map((field) => (
+          <div key={field._id} className={getWrapperClass(field)}>
+            <Field
+              field={field}
+              onFieldChange={handleFieldChange}
+              ConditionallyBound={ConditionallyBound}
+            />
+          </div>
+        ))}
+
+      {settings.ui === "material" && (
+        <Grid container spacing={0}>
+          {Fields.map((field) => (
+            <Grid key={field._id} item xs={Number(field.col)}>
+              <div className={getWrapperClass(field)}>
+                <Item>
+                  <FieldMaterial
+                    field={field}
+                    onFieldChange={handleFieldChange}
+                    ConditionallyBound={ConditionallyBound}
+                  />
+                </Item>
+              </div>
+            </Grid>
+          ))}
+        </Grid>
+      )}
     </div>
   );
 }

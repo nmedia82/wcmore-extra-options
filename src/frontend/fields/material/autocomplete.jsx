@@ -1,14 +1,15 @@
-import { Autocomplete, TextField} from "@mui/material";
+import { Autocomplete, TextField } from "@mui/material";
 
 const AutoComplete = ({ field, FieldObj, onFieldChange }) => {
-return (
+  return (
     <Autocomplete
-  disablePortal
-  id="combo-box-demo"
-  options={field.options}
-  sx={{ width: 300 }}
-  renderInput={(params) => <TextField {...params} label="Movie" />}
-/>
-);
-}
+      fullWidth
+      disablePortal
+      id="combo-box-demo"
+      options={field.options}
+      sx={{ width: 300 }}
+      renderInput={(params) => <TextField {...params} label="Movie" />}
+    />
+  );
+};
 export default AutoComplete;

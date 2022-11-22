@@ -48,6 +48,13 @@
         "detail": ""
       },
       {
+        "name": "col",
+        "type": "select",
+        "title": "Field width",
+        "detail": "",
+        "options": ["Select", 2, 4, 6, 8, 10, 12]
+      },
+      {
         "name": "options",
         "type": "options",
         "title": "Field options",
@@ -92,6 +99,13 @@
         "type": "boolean",
         "title": "Required?",
         "detail": ""
+      },
+      {
+        "name": "col",
+        "type": "select",
+        "title": "Field width",
+        "detail": "",
+        "options": ["Select", 2, 4, 6, 8, 10, 12]
       }
     ]
   },

@@ -1,3 +1,10 @@
-.conditionally-hidden{
-    display: none;
+.wcforce-extra-fields-wrapper {
+  width: 80%;
+  margin: 0 auto;
+  border: 1px solid;
+  background-color: bisque;
+  padding: 10px;
+}
+.conditionally-hidden {
+  display: none;
 }

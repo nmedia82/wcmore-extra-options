@@ -17,6 +17,9 @@ export class FieldClass {
     if (this.field.type === "text") placeholder = this.field.title;
     return placeholder;
   }
+  description() {
+    return this.field.description;
+  }
   input_type() {
     return this.field.input_type;
   }
