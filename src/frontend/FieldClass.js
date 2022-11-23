@@ -20,6 +20,9 @@ export class FieldClass {
   description() {
     return this.field.description;
   }
+  prefix() {
+    return this.field.prefix;
+  }
   input_type() {
     return this.field.input_type;
   }
@@ -31,6 +34,9 @@ export class FieldClass {
   }
   col() {
     return this.field.col !== "" ? Number(this.field.col) : 12;
+  }
+  required() {
+    return !this.field.required ? false : true;
   }
 
   class() {

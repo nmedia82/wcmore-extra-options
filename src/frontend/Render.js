@@ -6,18 +6,26 @@ import Field from "./field";
 import FieldMaterial from "./field-material";
 import { Grid, Paper, styled } from "@mui/material";
 
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
-  // backgroundColor: "#ffe4c4",
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: "left",
-  color: theme.palette.text.secondary,
-}));
+// const Item = styled(Paper)(({ theme }) => ({
+//   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
+//   // backgroundColor: "#ffe4c4",
+//   ...theme.typography.body2,
+//   padding: theme.spacing(1),
+//   textAlign: "left",
+//   color: theme.palette.text.secondary,
+// }));
+
+const Item = styled("div")({
+  color: "darkslategray",
+  // backgroundColor: "aliceblue",
+  padding: 8,
+  borderRadius: 4,
+  minHeight: 50,
+});
 
 const fields = JSON.parse(localStorage.getItem("wcmore_fields"));
 
-console.log(settings);
+// console.log(settings);
 function Render() {
   const [Fields, setFields] = useState([]);
   const [Conditions, setConditions] = useState([]);
