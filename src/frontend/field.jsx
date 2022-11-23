@@ -5,9 +5,10 @@ import Boolean from "./fields/boolean";
 import Select from "./fields/select";
 import Checkbox from "./fields/checkbox";
 import Radio from "./fields/radio";
-import AutoComplete from "./fields/material/autocomplete";
+// import AutoComplete from "./fields/material/autocomplete" 
 
-const Field = ({ field, onFieldChange, FieldObj }) => {
+const Field = ({ field, onFieldChange, ConditionallyBound }) => {
+  const FieldObj = new FieldClass(field, ConditionallyBound);
   // FieldObj.input_attributes();
   switch (field.input_type) {
     case "email":
@@ -45,15 +46,6 @@ const Field = ({ field, onFieldChange, FieldObj }) => {
     case "radio":
       return (
         <Radio
-          field={field}
-          FieldObj={FieldObj}
-          onFieldChange={onFieldChange}
-        />
-      );
-
-    case "autocomplete":
-      return (
-        <AutoComplete
           field={field}
           FieldObj={FieldObj}
           onFieldChange={onFieldChange}

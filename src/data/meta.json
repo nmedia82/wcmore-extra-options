@@ -48,6 +48,12 @@
         "detail": ""
       },
       {
+        "name": "has_multi_values",
+        "type": "boolean",
+        "title": "Allow multiple?",
+        "detail": ""
+      },
+      {
         "name": "col",
         "type": "select",
         "title": "Field width",

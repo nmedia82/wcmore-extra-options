@@ -6,15 +6,6 @@ import Field from "./field";
 import FieldMaterial from "./field-material";
 import { Grid, Paper, styled } from "@mui/material";
 
-// const Item = styled(Paper)(({ theme }) => ({
-//   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
-//   // backgroundColor: "#ffe4c4",
-//   ...theme.typography.body2,
-//   padding: theme.spacing(1),
-//   textAlign: "left",
-//   color: theme.palette.text.secondary,
-// }));
-
 const Item = styled("div")({
   color: "darkslategray",
   // backgroundColor: "aliceblue",
@@ -69,17 +60,19 @@ function Render() {
         ...document.querySelectorAll(`.${meta.field_id}.wcforce-field:checked`),
       ].map((c) => c.value);
       // console.log(checked);
-    } else {
-      value = e.target.value;
+    } else if( meta.type === 'text') {
+      value = {value:e.target.value,price:meta.price};
+    }else if( meta.type === 'options') {
+      value = {value:e.target.value};
     }
 
-    user_data = { ...UserData, [meta.field_id]: value };
+    user_data = { ...UserData, [meta.field_id]:{...value} };
 
     // updating value of current field
     const fields = [...Fields];
     const found = fields.find((f) => f.field_id === meta.field_id);
     const index = fields.indexOf(found);
-    fields[index].value = value;
+    fields[index].value = value.value;
 
     // console.log(fields[index]);
 

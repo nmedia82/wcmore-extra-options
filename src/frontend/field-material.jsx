@@ -1,6 +1,6 @@
 import { FieldClass } from "./FieldClass";
 import Text from "./fields/material/text";
-import Boolean from "./fields/boolean";
+import RadioMaterial from "./fields/material/radio";
 // import "./fields/input.css";
 
 import Checkbox from "./fields/checkbox";
@@ -21,11 +21,7 @@ const FieldMaterial = ({ field, onFieldChange, ConditionallyBound }) => {
       );
     case "switch":
       return (
-        <Boolean
-          field={field}
-          FieldObj={FieldObj}
-          onFieldChange={onFieldChange}
-        />
+        <div></div>
       );
     case "select":
       return (
@@ -46,7 +42,7 @@ const FieldMaterial = ({ field, onFieldChange, ConditionallyBound }) => {
 
     case "radio":
       return (
-        <Radio
+        <RadioMaterial
           field={field}
           FieldObj={FieldObj}
           onFieldChange={onFieldChange}

@@ -27,6 +27,9 @@ export class FieldClass {
     return this.field.input_type;
   }
   default_value() {
+    if(this.has_multi_values())
+      return this.field.value !== undefined ? this.field.value : [];
+    else 
     return this.field.value !== undefined ? this.field.value : "";
   }
   options() {
@@ -45,6 +48,9 @@ export class FieldClass {
       classname += " conditionally-bound";
     }
     return classname;
+  }
+  has_multi_values(){
+    return this.field.has_multi_values ? true : false;
   }
 
   label() {

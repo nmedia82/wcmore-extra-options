@@ -4,6 +4,7 @@ import {
   Select,
   MenuItem,
   FormHelperText,
+  OutlinedInput
 } from "@mui/material";
 const SelectMaterial = ({ field, FieldObj, onFieldChange }) => {
   return (
@@ -12,6 +13,7 @@ const SelectMaterial = ({ field, FieldObj, onFieldChange }) => {
         {FieldObj.label()}
       </InputLabel>
       <Select
+        multiple={FieldObj.has_multi_values()}
         labelId={`${FieldObj.label()}-label`}
         name={FieldObj.name()}
         id={FieldObj.id()}
@@ -20,12 +22,12 @@ const SelectMaterial = ({ field, FieldObj, onFieldChange }) => {
         onChange={(e) => onFieldChange(e, field)}
       >
         {FieldObj.options().map((option) => (
-          <MenuItem key={option.option_id} value={option.label}>
+          <MenuItem key={option.option_id} value={option}>
             {option.label}
           </MenuItem>
         ))}
       </Select>
-      <FormHelperText id="outlined-weight-helper-text">
+      <FormHelperText id={`outlined-helper-${FieldObj.id()}`}>
         {FieldObj.description()}
       </FormHelperText>
     </FormControl>

@@ -58,7 +58,7 @@ function CreateOption({ Meta, SavedFields, onSaveFields, onMediaSelect }) {
     };
     if (field.type === "options") new_field.options = [];
     const fields = [...Fields, new_field];
-    console.log(field, new_field);
+    // console.log(field, new_field);
     setFields(fields);
     // const last = fields[fields.length - 1];
     // setSelectedField(field);

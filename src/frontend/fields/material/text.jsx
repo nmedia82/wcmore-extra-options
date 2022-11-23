@@ -13,17 +13,16 @@ const Text = ({ field, FieldObj, onFieldChange }) => {
           // error={true}
           name={FieldObj.name()}
           id={FieldObj.id()}
-          // type={FieldObj.input_type()}
-
+          type={FieldObj.input_type()}
           label={FieldObj.label()}
-          value={field.value}
-          defaultValue={FieldObj.default_value()}
+          value={FieldObj.default_value()}
+          // defaultValue={FieldObj.default_value()}
           onChange={(e) => onFieldChange(e, field)}
           variant="outlined"
           InputProps={getInputProps(FieldObj)}
         />
       </Tooltip>
-      <FormHelperText id="outlined-weight-helper-text">
+      <FormHelperText id={`outlined-helper-${FieldObj.id()}`}>
         {FieldObj.description()}
       </FormHelperText>
     </FormControl>
@@ -35,7 +34,7 @@ const getInputProps = (FieldObj) => {
     case "text":
       return {
         startAdornment: (
-          <InputAdornment position="start">{FieldObj.prefix()}</InputAdornment>
+          FieldObj.prefix() && <InputAdornment position="start">{FieldObj.prefix()}</InputAdornment>
         ),
       };
 
@@ -43,7 +42,7 @@ const getInputProps = (FieldObj) => {
       return {
         inputProps: { max: 5, min: 3 },
         startAdornment: (
-          <InputAdornment position="start">{FieldObj.prefix()}</InputAdornment>
+          FieldObj.prefix() && <InputAdornment position="start">{FieldObj.prefix()}</InputAdornment>
         ),
       };
     default:
