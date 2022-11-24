@@ -22,14 +22,6 @@ function App() {
   };
 
   useEffect(() => {
-    let metaObjs = [];
-    // for (let field of meta) {
-    //   const Field = new FieldClass(field);
-    //   // Field.init();
-    //   // console.log(Field);
-    //   metaObjs.push(Field);
-    // }
-
     setMeta([...meta]);
   }, []);
 

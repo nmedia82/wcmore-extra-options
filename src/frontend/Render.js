@@ -60,13 +60,13 @@ function Render() {
         ...document.querySelectorAll(`.${meta.field_id}.wcforce-field:checked`),
       ].map((c) => c.value);
       // console.log(checked);
-    } else if( meta.type === 'text') {
-      value = {value:e.target.value,price:meta.price};
-    }else if( meta.type === 'options') {
-      value = {value:e.target.value};
+    } else if (meta.type === "text") {
+      value = { value: e.target.value, price: meta.price };
+    } else if (meta.type === "options") {
+      value = { value: e.target.value };
     }
 
-    user_data = { ...UserData, [meta.field_id]:{...value} };
+    user_data = { ...UserData, [meta.field_id]: { ...value } };
 
     // updating value of current field
     const fields = [...Fields];
@@ -148,6 +148,11 @@ function Render() {
 
   return (
     <div className="wcforce-extra-fields-wrapper">
+      <input
+        type="hidden"
+        name="wcforce_cart_data"
+        value={JSON.stringify(UserData)}
+      />
       {settings.ui === "normal" &&
         Fields.map((field) => {
           const FieldObj = new FieldClass(field, ConditionallyBound);
