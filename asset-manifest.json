@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/wcmore-extra-options/static/css/main.ea1197a0.css",
-    "main.js": "/wcmore-extra-options/static/js/main.f2f8f7b0.js",
+    "main.js": "/wcmore-extra-options/static/js/main.d6451359.js",
     "static/js/787.aa9cc4ce.chunk.js": "/wcmore-extra-options/static/js/787.aa9cc4ce.chunk.js",
     "index.html": "/wcmore-extra-options/index.html",
     "main.ea1197a0.css.map": "/wcmore-extra-options/static/css/main.ea1197a0.css.map",
-    "main.f2f8f7b0.js.map": "/wcmore-extra-options/static/js/main.f2f8f7b0.js.map",
+    "main.d6451359.js.map": "/wcmore-extra-options/static/js/main.d6451359.js.map",
     "787.aa9cc4ce.chunk.js.map": "/wcmore-extra-options/static/js/787.aa9cc4ce.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.ea1197a0.css",
-    "static/js/main.f2f8f7b0.js"
+    "static/js/main.d6451359.js"
   ]
 }
