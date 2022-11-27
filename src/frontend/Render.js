@@ -14,22 +14,26 @@ const Item = styled("div")({
   minHeight: 50,
 });
 
-const fields = JSON.parse(localStorage.getItem("wcmore_fields"));
+const fields = window.wcforce_saved_fields
+  ? JSON.parse(window.wcforce_saved_fields)
+  : JSON.parse(localStorage.getItem("wcmore_fields"));
 
 // console.log(settings);
 function Render() {
   const [Fields, setFields] = useState([]);
   const [Conditions, setConditions] = useState([]);
   const [ConditionallyBound, setConditionallyBound] = useState([]);
-  const [UserData, setUserData] = useState({});
+  const [CartData, setCartData] = useState({});
 
   useEffect(() => {
     // find active conditions
+
     const filter = fields
       .filter((f) => f.status)
       .map((f) => ({ ...f, is_hidden: is_conditionally_hidden(f) }));
     let conditions = {};
     let conditionally_bound = [];
+    // console.log(filter);
     for (let field of filter) {
       if (!field.conditions.status) continue;
       conditions = { ...conditions, [field.field_id]: field.conditions };
@@ -52,21 +56,32 @@ function Render() {
   }, []);
 
   const handleFieldChange = (e, meta) => {
-    console.log(e, meta);
+    console.log(e.target.value, meta);
     let user_data = "";
-    let value = "";
+    let value = meta.input_type === "checkbox" ? [] : "";
     if (meta.input_type === "checkbox") {
-      value = [
-        ...document.querySelectorAll(`.${meta.field_id}.wcforce-field:checked`),
-      ].map((c) => c.value);
-      // console.log(checked);
+      const { value: opt_value, checked } = e.target;
+      const { options } = meta;
+      let found = options.find((option) => option.option_id === opt_value);
+      const index = options.indexOf(found);
+      console.log(index, opt_value, found);
+      found = { ...found, checked };
+      options[index] = found;
+      meta.options = [...options];
+      const checked_options = options.filter((option) => option.checked);
+      value = { value: checked_options };
     } else if (meta.type === "text") {
       value = { value: e.target.value, price: meta.price };
     } else if (meta.type === "options") {
       value = { value: e.target.value };
     }
 
-    user_data = { ...UserData, [meta.field_id]: { ...value } };
+    //keys to be included in CartData
+    const { type, input_type, price, hide_in_cart } = meta;
+    user_data = {
+      ...CartData,
+      [meta.field_id]: { ...value, type, input_type, price, hide_in_cart },
+    };
 
     // updating value of current field
     const fields = [...Fields];
@@ -91,7 +106,7 @@ function Render() {
 
     setFields(fields);
     console.log(user_data);
-    setUserData(user_data);
+    setCartData(user_data);
   };
 
   const is_conditionally_hidden = (f, user_values = {}) => {
@@ -151,7 +166,7 @@ function Render() {
       <input
         type="hidden"
         name="wcforce_cart_data"
-        value={JSON.stringify(UserData)}
+        value={JSON.stringify(CartData)}
       />
       {settings.ui === "normal" &&
         Fields.map((field) => {

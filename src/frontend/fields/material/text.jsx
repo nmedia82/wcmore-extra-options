@@ -33,16 +33,16 @@ const getInputProps = (FieldObj) => {
   switch (FieldObj.input_type()) {
     case "text":
       return {
-        startAdornment: (
-          FieldObj.prefix() && <InputAdornment position="start">{FieldObj.prefix()}</InputAdornment>
+        startAdornment: FieldObj.prefix() && (
+          <InputAdornment position="start">{FieldObj.prefix()}</InputAdornment>
         ),
       };
 
     case "number":
       return {
         inputProps: { max: 5, min: 3 },
-        startAdornment: (
-          FieldObj.prefix() && <InputAdornment position="start">{FieldObj.prefix()}</InputAdornment>
+        startAdornment: FieldObj.prefix() && (
+          <InputAdornment position="start">{FieldObj.prefix()}</InputAdornment>
         ),
       };
     default:

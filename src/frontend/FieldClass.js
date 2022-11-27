@@ -27,10 +27,9 @@ export class FieldClass {
     return this.field.input_type;
   }
   default_value() {
-    if(this.has_multi_values())
+    if (this.has_multi_values())
       return this.field.value !== undefined ? this.field.value : [];
-    else 
-    return this.field.value !== undefined ? this.field.value : "";
+    else return this.field.value !== undefined ? this.field.value : "";
   }
   options() {
     return this.field.options !== undefined ? this.field.options : [];
@@ -49,8 +48,10 @@ export class FieldClass {
     }
     return classname;
   }
-  has_multi_values(){
-    return this.field.has_multi_values ? true : false;
+  has_multi_values() {
+    return this.field.has_multi_values || this.input_type() === "checkbox"
+      ? true
+      : false;
   }
 
   label() {

@@ -3,7 +3,7 @@ import Text from "./fields/material/text";
 import RadioMaterial from "./fields/material/radio";
 // import "./fields/input.css";
 
-import Checkbox from "./fields/checkbox";
+import CheckboxMaterial from "./fields/material/checkbox";
 import Radio from "./fields/radio";
 import AutoComplete from "./fields/material/autocomplete";
 import SelectMaterial from "./fields/material/select";
@@ -20,9 +20,7 @@ const FieldMaterial = ({ field, onFieldChange, ConditionallyBound }) => {
         <Text field={field} FieldObj={FieldObj} onFieldChange={onFieldChange} />
       );
     case "switch":
-      return (
-        <div></div>
-      );
+      return <div></div>;
     case "select":
       return (
         <SelectMaterial
@@ -33,7 +31,7 @@ const FieldMaterial = ({ field, onFieldChange, ConditionallyBound }) => {
       );
     case "checkbox":
       return (
-        <Checkbox
+        <CheckboxMaterial
           field={field}
           FieldObj={FieldObj}
           onFieldChange={onFieldChange}

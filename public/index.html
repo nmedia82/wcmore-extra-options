@@ -15,6 +15,11 @@
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
     -->
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <script
+      src="https://code.jquery.com/jquery-3.6.1.min.js"
+      integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
+      crossorigin="anonymous"
+    ></script>
     <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
@@ -30,12 +35,9 @@
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="wcforce-root"></div>
 
-    <form
-      action="https://nmdevteam.com/ppom/product/ppom-audio-video-enable-multiple-selection-9/"
-      method="post"
-    >
+    <form action="https://code.wcforce.com/product/mug/" method="post">
       <h2>Rendering</h2>
-      <input type="hidden" name="add-to-cart" value="6434" />
+      <input type="hidden" name="add-to-cart" value="11" />
       <div id="wcforce-rendering"></div>
       <input type="submit" value="Send" />
     </form>
@@ -51,14 +53,24 @@
       -->
 
     <script type="text/javascript">
-      function wcforce_call_wp(fn, callback) {
-        const resp = window[fn]();
-        callback(resp);
+      function wcforce_save_extra_fields(fields, callback) {
+        const data = {
+          action: "wcforce_save_extra_fields",
+          fields: JSON.stringify(fields),
+        };
+        const url = `https://code.wcforce.com/wp-json/wcforce/v1/save_extra_fields`;
+        jQuery.post(url, data, function (resp) {
+          callback(resp);
+        });
       }
+      // function wcforce_call_wp(fn, callback) {
+      //   const resp = window[fn]();
+      //   callback(resp);
+      // }
 
-      function wcforce_get_images() {
-        return { id: 3, id: 4 };
-      }
+      // function wcforce_get_images() {
+      //   return { id: 3, id: 4 };
+      // }
     </script>
   </body>
 </html>
