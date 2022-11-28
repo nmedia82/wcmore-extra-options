@@ -5,6 +5,7 @@ import { FieldClass } from "./FieldClass";
 import Field from "./field";
 import FieldMaterial from "./field-material";
 import { Grid, Paper, styled } from "@mui/material";
+import PriceDisplay from "./price";
 
 const Item = styled("div")({
   color: "darkslategray",
@@ -23,7 +24,7 @@ function Render() {
   const [Fields, setFields] = useState([]);
   const [Conditions, setConditions] = useState([]);
   const [ConditionallyBound, setConditionallyBound] = useState([]);
-  const [CartData, setCartData] = useState({});
+  const [CartData, setCartData] = useState([]);
 
   useEffect(() => {
     // find active conditions
@@ -56,60 +57,84 @@ function Render() {
   }, []);
 
   const handleFieldChange = (e, meta) => {
-    console.log(e.target.value, meta);
-    let user_data = "";
+    // console.log(e.target.value, meta);
     let value = meta.input_type === "checkbox" ? [] : "";
     if (meta.input_type === "checkbox") {
       const { value: opt_value, checked } = e.target;
       const { options } = meta;
       let found = options.find((option) => option.option_id === opt_value);
       const index = options.indexOf(found);
-      console.log(index, opt_value, found);
       found = { ...found, checked };
       options[index] = found;
       meta.options = [...options];
-      const checked_options = options.filter((option) => option.checked);
-      value = { value: checked_options };
+      value = { value: options.filter((option) => option.checked) };
     } else if (meta.type === "text") {
       value = { value: e.target.value, price: meta.price };
     } else if (meta.type === "options") {
       value = { value: e.target.value };
     }
 
+    // set key for multi value
+    const data_type = typeof value.value;
     //keys to be included in CartData
-    const { type, input_type, price, hide_in_cart } = meta;
-    user_data = {
-      ...CartData,
-      [meta.field_id]: { ...value, type, input_type, price, hide_in_cart },
-    };
+    const { field_id, title, type, input_type, price, hide_in_cart } = meta;
 
+    let cart_data = [...CartData];
+    const found_in_cart = cart_data.find((d) => d.field_id === meta.field_id);
+    if (found_in_cart) {
+      const index = cart_data.indexOf(found_in_cart);
+      cart_data[index] = {
+        ...value,
+        field_id,
+        type,
+        input_type,
+        price,
+        hide_in_cart,
+        title,
+        data_type,
+      };
+    } else {
+      cart_data = [
+        ...cart_data,
+        {
+          ...value,
+          field_id,
+          type,
+          input_type,
+          price,
+          hide_in_cart,
+          title,
+          data_type,
+        },
+      ];
+    }
     // updating value of current field
     const fields = [...Fields];
     const found = fields.find((f) => f.field_id === meta.field_id);
     const index = fields.indexOf(found);
     fields[index].value = value.value;
 
-    // console.log(fields[index]);
+    // console.log(CartData);
 
     // if conditionally bound
     if (ConditionallyBound.includes(meta.field_id)) {
       // console.log(is_conditionally_hidden(meta));
-      console.log(Conditions);
+      // console.log(Conditions);
       for (let field_id in Conditions) {
         // console.log(field_id);
         const found = fields.find((f) => f.field_id === field_id);
         const index = fields.indexOf(found);
-        fields[index].is_hidden = is_conditionally_hidden(found, user_data);
+        fields[index].is_hidden = is_conditionally_hidden(found, cart_data);
         console.log(fields[index]);
       }
     }
 
     setFields(fields);
-    console.log(user_data);
-    setCartData(user_data);
+    // console.log(cart_data);
+    setCartData(cart_data);
   };
 
-  const is_conditionally_hidden = (f, user_values = {}) => {
+  const is_conditionally_hidden = (f, user_values = []) => {
     const { bound, rules, status, visibility } = f.conditions;
     if (!status) return false;
     const _true = visibility === "show" ? false : true;
@@ -128,25 +153,26 @@ function Render() {
     for (let rule of rules) {
       // console.log(rules);
       const { field, operator, value } = rule;
-      // console.log(`${user_values[field]} === ${value}`);
+      const found = user_values.find((m) => m.field_id === field);
+      // console.log(found, `${found} === ${value}`);
+      if (!found) continue;
       // array values
-      if (typeof user_values[field] === "object") {
-        if (operator === "is" && user_values[field].includes(value))
+      if (found.input_type === "checkbox") {
+        const found_values = found.value.map((v) => v.label);
+        // console.log(found_values);
+        if (operator === "is" && found_values.includes(value)) matched_rules++;
+        if (operator === "not" && !found_values.includes(value))
           matched_rules++;
-        if (operator === "not" && !user_values[field].includes(value))
-          matched_rules++;
+      } else if (found.type === "options" && found.input_type !== "checkbox") {
+        const { label: cart_value } = found.value;
+        if (operator === "is" && cart_value === value) matched_rules++;
+        if (operator === "not" && cart_value !== value) matched_rules++;
       } else {
-        if (operator === "is" && user_values[field] === value) matched_rules++;
-        if (operator === "not" && user_values[field] !== value) matched_rules++;
-        if (
-          operator === "greater than" &&
-          Number(user_values[field]) > Number(value)
-        )
+        if (operator === "is" && found.value === value) matched_rules++;
+        if (operator === "not" && found.value !== value) matched_rules++;
+        if (operator === "greater than" && Number(found.value) > Number(value))
           matched_rules++;
-        if (
-          operator === "less than" &&
-          Number(user_values[field]) < Number(value)
-        )
+        if (operator === "less than" && Number(found.value) < Number(value))
           matched_rules++;
       }
     }
@@ -163,6 +189,7 @@ function Render() {
 
   return (
     <div className="wcforce-extra-fields-wrapper">
+      <PriceDisplay CartData={CartData} Hello={"hi"} />
       <input
         type="hidden"
         name="wcforce_cart_data"
