@@ -6,19 +6,33 @@ import meta from "./data/meta.json";
 import useLocalStorage from "./common/useLocalStorage";
 import { toast } from "react-toastify";
 import CreateOption from "./page/create-options";
+import { saveExtraFields } from "./services/modalService";
+
+window.WCForce_Data = {
+  api_url: "https://code.wcforce.com/wp-json/wcforce/v1",
+};
 
 function App() {
   const [Meta, setMeta] = useState([]);
   const [Fields, setFields] = useLocalStorage("wcmore_fields", []);
 
-  const handleSaveFields = (fields) => {
-    console.log(fields);
-    const resp = window["wcforce_save_extra_fields"](fields, function (resp) {
-      console.log(resp);
+  const handleSaveFields = async (fields) => {
+    try {
+      const post_data = {
+        title: "Meta One",
+        meta: fields,
+        settings: { title: "yes" },
+        p_attached: [33],
+        c_attached: null,
+      };
+      const { data: response } = await saveExtraFields(post_data);
+
+      console.log(response);
       setFields(fields);
       toast.success("Fields saved.");
-    });
-
+    } catch (e) {
+      toast.error(e.get_message());
+    }
     // setFields(fields);
     // setSelectedField(field);
   };

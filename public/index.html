@@ -51,26 +51,5 @@
         To begin the development, run `npm start` or `yarn start`.
         To create a production bundle, use `npm run build` or `yarn build`.
       -->
-
-    <script type="text/javascript">
-      function wcforce_save_extra_fields(fields, callback) {
-        const data = {
-          action: "wcforce_save_extra_fields",
-          fields: JSON.stringify(fields),
-        };
-        const url = `https://code.wcforce.com/wp-json/wcforce/v1/save_extra_fields`;
-        jQuery.post(url, data, function (resp) {
-          callback(resp);
-        });
-      }
-      // function wcforce_call_wp(fn, callback) {
-      //   const resp = window[fn]();
-      //   callback(resp);
-      // }
-
-      // function wcforce_get_images() {
-      //   return { id: 3, id: 4 };
-      // }
-    </script>
   </body>
 </html>
