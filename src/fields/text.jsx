@@ -1,18 +1,21 @@
+import React from "react";
+import { Form } from "react-bootstrap";
+
 const Text = ({ meta, onMetaChange }) => {
   return (
-    <div className="wcforce-field-wrapper">
-      <input
+    <Form.Group className="mb-3 wcforce-field-wrapper">
+      <Form.Control
         type="text"
         name={meta.name}
         id={meta.name}
         placeholder={meta.title}
-        className="wcmore-input"
-        onChange={(e) => onMetaChange(e, meta)}
-        value={meta.value}
+        onChange={onMetaChange}
+        value={meta.value || ""} // Ensure controlled component behavior
       />
-      <br />
-      <small>{meta.detail}</small>
-    </div>
+      {meta.detail && (
+        <Form.Text className="text-muted">{meta.detail}</Form.Text>
+      )}
+    </Form.Group>
   );
 };
 

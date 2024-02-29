@@ -40,7 +40,7 @@
         "type": "text",
         "title": "Field description",
         "detail": "Field details"
-      },      
+      },
       {
         "name": "is_required",
         "type": "boolean",
@@ -138,6 +138,13 @@
     "details": "color options input",
     "icon": "dropdown",
     "meta": [
+      {
+        "name": "input",
+        "type": "select",
+        "title": "Input type",
+        "detail": "Select input type to display",
+        "options": ["Select Type", "color"]
+      },
       {
         "name": "title",
         "type": "text",

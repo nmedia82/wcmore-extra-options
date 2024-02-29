@@ -1,12 +1,13 @@
-import { useState, useEffect } from "react";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import React, { useState, useEffect } from "react";
+import { ToastContainer, Button } from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap-icons/font/bootstrap-icons.css";
 import "./App.css";
 import meta from "./data/meta.json";
 import useLocalStorage from "./common/useLocalStorage";
 import { toast } from "react-toastify";
-import CreateOption from "./page/create-options";
 import { saveExtraFields } from "./services/modalService";
+import OptionCreator from "./page/create-options";
 
 window.WCForce_Data = {
   api_url: "https://code.wcforce.com/wp-json/wcforce/v1",
@@ -26,15 +27,12 @@ function App() {
         c_attached: null,
       };
       const { data: response } = await saveExtraFields(post_data);
-
       console.log(response);
       setFields(fields);
       toast.success("Fields saved.");
     } catch (e) {
-      toast.error(e.get_message());
+      toast.error(e.message); // Assuming `e.get_message()` was a typo and should be `e.message`
     }
-    // setFields(fields);
-    // setSelectedField(field);
   };
 
   useEffect(() => {
@@ -45,53 +43,13 @@ function App() {
     setMeta([...meta]);
   }, []);
 
-  const handleMediaSelect = () => {
-    window.wcforce_call_wp("wcforce_save_extra_fields", function (resp) {
-      console.log(resp);
-    });
-    return;
-    var wp_media_type = "image";
-    // if (field.type == 'audio') {
-    //     wp_media_type = 'audio,video';
-    // }
-
-    const params = {
-      title: "Choose Images",
-      library: {
-        type: wp_media_type,
-      },
-      button: {
-        text: "Add Image",
-      },
-      multiple: true,
-    };
-
-    var frame = window.wcforce_get_wp_media(params);
-
-    // frame.on("close", function () {
-    //   var selection = frame.state().get("selection");
-    //   if (!selection.length) {
-    //   }
-    // });
-
-    frame.on("select", function () {
-      var attachment = frame.state().get("selection").toJSON();
-      // var selection = state.get('selection');
-      console.log("select", attachment);
-    });
-
-    frame.open();
-  };
-
   return (
     <>
       <ToastContainer />
-
-      <CreateOption
-        Meta={Meta}
+      <OptionCreator
+        meta={Meta}
         SavedFields={Fields}
         onSaveFields={handleSaveFields}
-        onMediaSelect={handleMediaSelect}
       />
     </>
   );

@@ -1,18 +1,18 @@
-import { CopyIcon, XCircleFillIcon } from "@primer/octicons-react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { Button, ListGroup } from "react-bootstrap";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import {
   wcforce_generate_option_schema,
   wcmore_get_field_id,
-  wcmore_get_input_value,
-} from "./../../common/helper";
+} from "../../common/helper";
 import Option from "./option";
+// Import your icon library here if you're replacing @primer/octicons-react
+import { PlusCircleFill, TrashFill, Clipboard } from "react-bootstrap-icons"; // Example with Bootstrap Icons
 
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list);
   const [removed] = result.splice(startIndex, 1);
   result.splice(endIndex, 0, removed);
-
   return result;
 };
 
@@ -29,102 +29,86 @@ function FieldOption({ options, input_type, onFieldOptionChange }) {
       ...Options,
       { ...option_schema, option_id: wcmore_get_field_id() },
     ];
-    // console.log(options);
     setOptions(options);
   };
 
   const onOptionClone = (option) => {
-    console.log(option);
     const new_option = { ...option, option_id: wcmore_get_field_id() };
     const options = [...Options, new_option];
     setOptions(options);
   };
 
   const onOptionDelete = (option) => {
-    const exclude = Options.filter((opt) => opt.option_id !== option.option_id);
-    onFieldOptionChange(exclude);
-  };
-
-  const handleOptionMetaChange = (e, setting) => {
-    // console.log(e.target.name);
-    const input_value = wcmore_get_input_value(e);
-    setting.value = input_value;
-    const options = [...Options];
-    let found = options.find((o) => o.option_id === setting.row_id);
-    let index = options.indexOf(found);
-    options[index][e.target.name] = input_value;
-    // setOptions(options);
-    onFieldOptionChange(options);
+    const filteredOptions = Options.filter(
+      (opt) => opt.option_id !== option.option_id
+    );
+    setOptions(filteredOptions);
+    onFieldOptionChange(filteredOptions);
   };
 
   function onDragEnd(result) {
-    if (!result.destination) {
-      return;
-    }
-
-    if (result.destination.index === result.source.index) {
-      return;
-    }
+    if (!result.destination) return;
+    if (result.destination.index === result.source.index) return;
 
     const options = reorder(
       Options,
       result.source.index,
       result.destination.index
     );
-
+    setOptions(options);
     onFieldOptionChange(options);
   }
 
-  const handleIconClick = (event, option) => {
-    if (event === "delete") {
-      onOptionDelete(option);
-    } else if (event === "clone") {
-      onOptionClone(option);
-    }
-  };
   return (
     <div>
-      <div className="wcforce-create-option">
-        <button onClick={() => onAddOption()}>Create Option</button>
-      </div>
+      <Button onClick={onAddOption} className="mb-3">
+        <PlusCircleFill /> Create Option
+      </Button>
 
-      <div>
-        <DragDropContext onDragEnd={onDragEnd}>
-          <Droppable droppableId="wcmore-field-list">
-            {(provided) => (
-              <div
-                className="wcmore-field-settings"
-                ref={provided.innerRef}
-                {...provided.droppableProps}
-              >
-                {Options.map((option, i) => (
-                  <Draggable
-                    draggableId={option.option_id}
-                    index={i}
-                    key={option.option_id}
-                  >
-                    {(provided) => (
-                      <div
-                        className="wcforce-option-wrapper"
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                      >
-                        <Option
-                          option={option}
-                          onOptionMetaChange={handleOptionMetaChange}
-                          onIconClick={handleIconClick}
-                        />
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Droppable droppableId="options-list">
+          {(provided) => (
+            <ListGroup {...provided.droppableProps} ref={provided.innerRef}>
+              {Options.map((option, index) => (
+                <Draggable
+                  key={option.option_id}
+                  draggableId={option.option_id}
+                  index={index}
+                >
+                  {(provided) => (
+                    <ListGroup.Item
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      className="d-flex justify-content-between align-items-center mb-2"
+                    >
+                      <div {...provided.dragHandleProps}>
+                        <Option option={option} />
                       </div>
-                    )}
-                  </Draggable>
-                ))}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-        </DragDropContext>
-      </div>
+                      <div>
+                        <Button
+                          variant="info"
+                          size="sm"
+                          onClick={() => onOptionClone(option)}
+                        >
+                          <Clipboard />
+                        </Button>{" "}
+                        <Button
+                          variant="danger"
+                          size="sm"
+                          onClick={() => onOptionDelete(option)}
+                        >
+                          <TrashFill />
+                        </Button>
+                      </div>
+                    </ListGroup.Item>
+                  )}
+                </Draggable>
+              ))}
+              {provided.placeholder}
+            </ListGroup>
+          )}
+        </Droppable>
+      </DragDropContext>
     </div>
   );
 }

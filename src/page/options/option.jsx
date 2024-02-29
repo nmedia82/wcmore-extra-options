@@ -1,11 +1,11 @@
+import React from "react";
+import { Row, Col, Form } from "react-bootstrap";
 import Text from "./../../fields/text";
 import Boolean from "./../../fields/boolean";
-import "./../../fields/input.css";
 import Select from "./../../fields/select";
 import { wcforce_get_default_options } from "../../common/helper";
-import { CopyIcon, XCircleFillIcon } from "@primer/octicons-react";
 
-function Option({ option, SavedFields, onOptionMetaChange, onIconClick }) {
+function Option({ option, SavedFields, onOptionMetaChange }) {
   const get_option_meta = (k) => {
     const value = option[k];
     switch (k) {
@@ -16,7 +16,6 @@ function Option({ option, SavedFields, onOptionMetaChange, onIconClick }) {
           title: k,
           value: value,
         };
-      // these two is for conditions rules options
       case "field":
       case "operator":
         const options = wcforce_get_default_options(k, SavedFields);
@@ -28,15 +27,6 @@ function Option({ option, SavedFields, onOptionMetaChange, onIconClick }) {
           options: ["Select", ...options],
           row_id: option["option_id"],
         };
-      case "icon_delete":
-        return {
-          type: "icon_delete",
-        };
-      case "icon_clone":
-        return {
-          type: "icon_clone",
-        };
-
       default:
         return {
           name: k,
@@ -57,41 +47,25 @@ function Option({ option, SavedFields, onOptionMetaChange, onIconClick }) {
       case "select":
         return <Select meta={meta} onMetaChange={onOptionMetaChange} />;
       case "option_image":
-        return <span className="wcforce-img-placeholder">M</span>;
-      case "icon_delete":
-        return (
-          <span
-            onClick={() => onIconClick("delete", option)}
-            className="wcforce-icon-wrapper delete"
-          >
-            <XCircleFillIcon size={24} />
-          </span>
-        );
-      case "icon_clone":
-        return (
-          <span
-            onClick={() => onIconClick("clone", option)}
-            className="wcforce-icon-wrapper clone"
-          >
-            <CopyIcon size={24} />
-          </span>
-        );
-
+        return <Form.Control type="file" />;
       default:
-        return "";
+        return null;
     }
   };
+
   return (
-    <div className="wcforce-meta-option-row">
-      {Object.keys(option).map((o, i) => {
-        const meta = get_option_meta(o);
-        return (
-          <div key={i} className={`wcforce-option-single ${o}`}>
-            {renderInput(meta)}
-          </div>
-        );
-      })}
-    </div>
+    <Row>
+      {Object.keys(option)
+        .filter((key) => key !== "icon_clone" && key !== "icon_delete")
+        .map((o, i) => {
+          const meta = get_option_meta(o);
+          return (
+            <Col key={i} md={4} className="mb-3">
+              {renderInput(meta)}
+            </Col>
+          );
+        })}
+    </Row>
   );
 }
 
