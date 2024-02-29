@@ -18,7 +18,11 @@ const CustomToggle = ({ eventKey }) => {
     useContext(AccordionContext).activeEventKey === eventKey;
 
   return (
-    <Button variant="clear" onClick={decoratedOnClick} className="float-right">
+    <Button
+      variant="outline-secondary"
+      onClick={decoratedOnClick}
+      className="float-right"
+    >
       {isCurrentEventKey ? (
         <i className="bi bi-dash-lg"></i>
       ) : (
@@ -28,22 +32,23 @@ const CustomToggle = ({ eventKey }) => {
   );
 };
 
-const OptionCreator = ({ meta }) => {
-  const [selectedFields, setSelectedFields] = useState([]);
+const OptionCreator = ({ meta, SavedFields, onSaveMeta }) => {
+  const [savedFields, setSavedFields] = useState([...SavedFields]);
 
   const addField = (fieldType) => {
     const newField = {
       ...fieldType,
       id: Math.random().toString(36).substr(2, 9),
+      options: [],
     };
-    setSelectedFields((prevFields) => [...prevFields, newField]);
+    setSavedFields((prevFields) => [...prevFields, newField]);
   };
 
   const handleInputChange = (index, event) => {
     // Using functional form of setState to ensure we're always working with the most current state
-    setSelectedFields((currentSelectedFields) => {
-      console.log(currentSelectedFields);
-      return currentSelectedFields.map((field, fieldIndex) => {
+    setSavedFields((currentsavedFields) => {
+      console.log(currentsavedFields);
+      return currentsavedFields.map((field, fieldIndex) => {
         if (fieldIndex === index) {
           // Find the field that needs updating
           return {
@@ -55,6 +60,23 @@ const OptionCreator = ({ meta }) => {
               }
               return m; // Return all other meta items unchanged
             }),
+          };
+        }
+        return field; // Return all other fields unchanged
+      });
+    });
+  };
+
+  const handleOptionsChange = (index, options) => {
+    // console.log(index, options);
+    setSavedFields((currentsavedFields) => {
+      console.log(currentsavedFields);
+      return currentsavedFields.map((field, fieldIndex) => {
+        if (fieldIndex === index) {
+          // Find the field that needs updating
+          return {
+            ...field,
+            options,
           };
         }
         return field; // Return all other fields unchanged
@@ -76,10 +98,8 @@ const OptionCreator = ({ meta }) => {
         </Col>
         <Col md={8}>
           <Accordion defaultActiveKey="0" className="mb-2">
-            {selectedFields.map((field, index) => (
+            {savedFields.map((field, index) => (
               <Card key={field.id} className="mb-3">
-                {" "}
-                {/* Add margin between each field */}
                 <Card.Header>
                   <h5 className="mb-0 d-flex justify-content-between align-items-center">
                     {field.label}
@@ -91,16 +111,16 @@ const OptionCreator = ({ meta }) => {
                     <FieldsTabs
                       Field={field}
                       onInputChange={(e) => handleInputChange(index, e)}
+                      onFieldOptionChange={(options) =>
+                        handleOptionsChange(index, options)
+                      }
                     />
                   </Card.Body>
                 </Accordion.Collapse>
               </Card>
             ))}
           </Accordion>
-          <Button
-            variant="primary"
-            onClick={() => console.log("Save logic here")}
-          >
+          <Button variant="primary" onClick={() => onSaveMeta(savedFields)}>
             Save Field
           </Button>
         </Col>

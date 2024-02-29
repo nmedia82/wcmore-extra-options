@@ -59,6 +59,21 @@ function FieldOption({ options, input_type, onFieldOptionChange }) {
     onFieldOptionChange(options);
   }
 
+  const handleOptionChange = (index, e) => {
+    const options = Options.map((option, optionIndex) => {
+      if (optionIndex === index) {
+        return {
+          ...option,
+          [e.target.id]: e.target.value,
+        };
+      }
+      return option;
+    });
+
+    setOptions(options);
+    onFieldOptionChange(options);
+  };
+
   return (
     <div>
       <Button onClick={onAddOption} className="mb-3">
@@ -82,7 +97,12 @@ function FieldOption({ options, input_type, onFieldOptionChange }) {
                       className="d-flex justify-content-between align-items-center mb-2"
                     >
                       <div {...provided.dragHandleProps}>
-                        <Option option={option} />
+                        <Option
+                          option={option}
+                          onOptionMetaChange={(e) =>
+                            handleOptionChange(index, e)
+                          }
+                        />
                       </div>
                       <div>
                         <Button

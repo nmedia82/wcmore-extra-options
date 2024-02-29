@@ -3,7 +3,7 @@ import { Tabs, Tab, Container, Row, Col } from "react-bootstrap";
 import RenderFields from "./RenderFields"; // Import your FieldInput component
 import FieldOption from "../options/field-options";
 
-const FieldsTabs = ({ Field, onInputChange }) => {
+const FieldsTabs = ({ Field, onInputChange, onFieldOptionChange }) => {
   const [key, setKey] = useState("general");
   //   console.log(Field);
   return (
@@ -26,7 +26,11 @@ const FieldsTabs = ({ Field, onInputChange }) => {
         </Container>
       </Tab>
       <Tab eventKey="options" title="Options">
-        <FieldOption options={[]} input_type={Field.type} />
+        <FieldOption
+          options={[...Field.options]}
+          input_type={Field.type}
+          onFieldOptionChange={onFieldOptionChange}
+        />
       </Tab>
       <Tab eventKey="conditions" title="Conditions">
         {/* Conditions logic here */}
