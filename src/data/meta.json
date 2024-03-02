@@ -42,6 +42,13 @@
         "detail": "Field details"
       },
       {
+        "name": "col",
+        "type": "select",
+        "title": "Field width",
+        "detail": "",
+        "options": ["Select", 2, 4, 6, 8, 10, 12]
+      },
+      {
         "name": "is_required",
         "type": "boolean",
         "title": "Required?",
@@ -59,13 +66,7 @@
         "title": "Hide in cart?",
         "detail": "Check if remove from cart meta"
       },
-      {
-        "name": "col",
-        "type": "select",
-        "title": "Field width",
-        "detail": "",
-        "options": ["Select", 2, 4, 6, 8, 10, 12]
-      },
+
       {
         "name": "options",
         "type": "options",

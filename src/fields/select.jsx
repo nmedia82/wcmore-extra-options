@@ -6,7 +6,6 @@ const Select = ({ meta, onMetaChange }) => {
     <Form.Group className="mb-3 wcforce-field-wrapper">
       <Form.Select
         name={meta.name}
-        id={meta.name}
         onChange={onMetaChange}
         value={meta.value || ""} // Ensure controlled component behavior
       >

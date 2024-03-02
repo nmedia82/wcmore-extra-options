@@ -2,6 +2,7 @@ import React from "react";
 import { Form } from "react-bootstrap";
 import Text from "../../fields/text";
 import Select from "../../fields/select";
+import Boolean from "../../fields/boolean";
 
 const RenderFields = ({ meta, onInputChange, handleOptionRemoval }) => {
   switch (meta.type) {
@@ -10,7 +11,7 @@ const RenderFields = ({ meta, onInputChange, handleOptionRemoval }) => {
     case "select":
       return <Select onMetaChange={onInputChange} meta={meta} />;
     case "boolean":
-      return <Form.Check type="checkbox" label={meta.title} />;
+      return <Boolean onMetaChange={onInputChange} meta={meta} />;
     default:
       return null;
   }

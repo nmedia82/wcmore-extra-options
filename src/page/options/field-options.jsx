@@ -1,22 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { Button, ListGroup } from "react-bootstrap";
+import { Button, Card, ListGroup } from "react-bootstrap";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import {
   wcforce_generate_option_schema,
   wcmore_get_field_id,
 } from "../../common/helper";
 import Option from "./option";
-// Import your icon library here if you're replacing @primer/octicons-react
-import { PlusCircleFill, TrashFill, Clipboard } from "react-bootstrap-icons"; // Example with Bootstrap Icons
+import { PlusCircleFill, TrashFill, Copy } from "react-bootstrap-icons"; // Assuming Bootstrap Icons
 
-const reorder = (list, startIndex, endIndex) => {
-  const result = Array.from(list);
-  const [removed] = result.splice(startIndex, 1);
-  result.splice(endIndex, 0, removed);
-  return result;
-};
-
-function FieldOption({ options, input_type, onFieldOptionChange }) {
+const FieldOption = ({ options, input_type, onFieldOptionChange }) => {
   const [Options, setOptions] = useState([]);
   const option_schema = wcforce_generate_option_schema(input_type);
 
@@ -30,34 +22,33 @@ function FieldOption({ options, input_type, onFieldOptionChange }) {
       { ...option_schema, option_id: wcmore_get_field_id() },
     ];
     setOptions(options);
+    onFieldOptionChange(options);
   };
 
   const onOptionClone = (option) => {
     const new_option = { ...option, option_id: wcmore_get_field_id() };
     const options = [...Options, new_option];
     setOptions(options);
+    onFieldOptionChange(options);
   };
 
-  const onOptionDelete = (option) => {
+  const onOptionDelete = (option_id) => {
     const filteredOptions = Options.filter(
-      (opt) => opt.option_id !== option.option_id
+      (opt) => opt.option_id !== option_id
     );
     setOptions(filteredOptions);
     onFieldOptionChange(filteredOptions);
   };
 
-  function onDragEnd(result) {
+  const onDragEnd = (result) => {
     if (!result.destination) return;
-    if (result.destination.index === result.source.index) return;
+    const items = Array.from(Options);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
 
-    const options = reorder(
-      Options,
-      result.source.index,
-      result.destination.index
-    );
-    setOptions(options);
-    onFieldOptionChange(options);
-  }
+    setOptions(items);
+    onFieldOptionChange(items);
+  };
 
   const handleOptionChange = (index, e) => {
     const options = Options.map((option, optionIndex) => {
@@ -83,7 +74,7 @@ function FieldOption({ options, input_type, onFieldOptionChange }) {
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="options-list">
           {(provided) => (
-            <ListGroup {...provided.droppableProps} ref={provided.innerRef}>
+            <div {...provided.droppableProps} ref={provided.innerRef}>
               {Options.map((option, index) => (
                 <Draggable
                   key={option.option_id}
@@ -91,46 +82,53 @@ function FieldOption({ options, input_type, onFieldOptionChange }) {
                   index={index}
                 >
                   {(provided) => (
-                    <ListGroup.Item
+                    <Card
+                      className="mb-3"
                       ref={provided.innerRef}
                       {...provided.draggableProps}
-                      className="d-flex justify-content-between align-items-center mb-2"
                     >
-                      <div {...provided.dragHandleProps}>
+                      <Card.Header
+                        className="d-flex justify-content-between align-items-center"
+                        {...provided.dragHandleProps}
+                      >
+                        <span>{option.label || "Option"}</span>
+                        <div>
+                          <Button
+                            variant="info"
+                            size="sm"
+                            onClick={() => onOptionClone(option)}
+                            className="me-2"
+                          >
+                            <Copy />
+                          </Button>
+                          <Button
+                            variant="danger"
+                            size="sm"
+                            onClick={() => onOptionDelete(option.option_id)}
+                          >
+                            <TrashFill />
+                          </Button>
+                        </div>
+                      </Card.Header>
+                      <Card.Body>
                         <Option
                           option={option}
                           onOptionMetaChange={(e) =>
                             handleOptionChange(index, e)
                           }
                         />
-                      </div>
-                      <div>
-                        <Button
-                          variant="info"
-                          size="sm"
-                          onClick={() => onOptionClone(option)}
-                        >
-                          <Clipboard />
-                        </Button>{" "}
-                        <Button
-                          variant="danger"
-                          size="sm"
-                          onClick={() => onOptionDelete(option)}
-                        >
-                          <TrashFill />
-                        </Button>
-                      </div>
-                    </ListGroup.Item>
+                      </Card.Body>
+                    </Card>
                   )}
                 </Draggable>
               ))}
               {provided.placeholder}
-            </ListGroup>
+            </div>
           )}
         </Droppable>
       </DragDropContext>
     </div>
   );
-}
+};
 
 export default FieldOption;

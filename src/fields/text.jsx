@@ -3,11 +3,10 @@ import { Form } from "react-bootstrap";
 
 const Text = ({ meta, onMetaChange }) => {
   return (
-    <Form.Group className="mb-3 wcforce-field-wrapper">
+    <Form.Group className="mb-1 wcforce-field-wrapper">
       <Form.Control
         type="text"
         name={meta.name}
-        id={meta.name}
         placeholder={meta.title}
         onChange={onMetaChange}
         value={meta.value || ""} // Ensure controlled component behavior

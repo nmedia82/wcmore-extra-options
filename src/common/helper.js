@@ -18,17 +18,17 @@ export function wcmore_get_field_id() {
   return text;
 }
 
-export function wcmore_create_field_title(field) {
-  let title = "New Field";
-  const meta_title = field.title;
-  if (meta_title) {
-    title = `${meta_title}`;
-  }
-  return (
-    <span>
-      {title} <small>{`(${field.input_type})`}</small>
-    </span>
-  );
+export function wcforce_generate_field_id(title) {
+  // Convert the title to lowercase
+  let fieldId = title.toLowerCase();
+
+  // Replace spaces with underscores (or you could use dashes)
+  fieldId = fieldId.replace(/\s+/g, "_");
+
+  // Remove special characters
+  fieldId = fieldId.replace(/[^a-z0-9_]/g, "");
+
+  return fieldId;
 }
 
 export function wcforce_get_meta_default_value(meta) {
@@ -76,4 +76,26 @@ export function wcforce_get_default_options(key, SavedFields) {
     default:
       return [];
   }
+}
+
+export function wcforce_get_meta_value(meta, key) {
+  const f = meta.find((m) => m.name === key);
+  if (f.value) return f.value;
+  return null;
+}
+
+export function wcforce_get_field_header(meta) {
+  const title = wcforce_get_meta_value(meta, "title");
+  const type = wcforce_get_meta_value(meta, "input"); // Get the type from the meta
+
+  if (title) {
+    const id = wcforce_get_meta_value(meta, "field_id");
+    if (id && type) {
+      return `${title} (${id}) - ${type}`; // Include type in the return string
+    } else if (id) {
+      return `${title} (${id})`;
+    }
+    return `${title} - ${type}`; // Handle case where there might not be an id but there is a type
+  }
+  return "New Field";
 }
