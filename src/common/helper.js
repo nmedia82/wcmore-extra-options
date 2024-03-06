@@ -99,3 +99,25 @@ export function wcforce_get_field_header(meta) {
   }
   return "New Field";
 }
+
+export const wcforce_generate_fields_meta = (Fields) => {
+  return new Promise((resolve) => {
+    const frontend_fields = Fields.map((f) => {
+      // Reduce the meta array into an object where each item's name becomes a key
+      const metaObject = f.meta.reduce((acc, m) => {
+        acc[m.name] = m.value;
+        acc["options"] = f.options; // Assuming options is directly on f
+        acc["conditions"] = f.conditions; // Assuming conditions is directly on f
+        return acc;
+      }, {});
+
+      // Return a new object merging the base field object with the meta object
+      return {
+        id: f.id,
+        ...metaObject,
+      };
+    });
+
+    resolve(frontend_fields);
+  });
+};

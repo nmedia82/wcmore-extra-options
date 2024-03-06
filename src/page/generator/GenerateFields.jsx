@@ -60,7 +60,7 @@ const FieldGenerator = ({ meta, SavedFields, onSaveMeta }) => {
       ...fieldType,
       id: wcmore_get_field_id(),
       options: [],
-      conditions: [],
+      conditions: {},
     };
     setSavedFields((prevFields) => [...prevFields, newField]);
   };
@@ -136,7 +136,6 @@ const FieldGenerator = ({ meta, SavedFields, onSaveMeta }) => {
       // console.log(currentsavedFields);
       return currentsavedFields.map((field, fieldIndex) => {
         if (fieldIndex === index) {
-          // Find the field that needs updating
           return {
             ...field,
             options,
@@ -149,7 +148,7 @@ const FieldGenerator = ({ meta, SavedFields, onSaveMeta }) => {
 
   const handleSaveConditions = (index, conditions) => {
     setSavedFields((currentsavedFields) => {
-      // console.log(currentsavedFields);
+      console.log(conditions);
       return currentsavedFields.map((field, fieldIndex) => {
         if (fieldIndex === index) {
           // Find the field that needs updating

@@ -12,7 +12,7 @@ const FieldsTabs = ({
   onSaveConditions,
 }) => {
   const [key, setKey] = useState("general");
-  //   console.log(Field);
+  // console.log(Field);
   return (
     <Tabs
       id="field-tabs"
@@ -41,7 +41,7 @@ const FieldsTabs = ({
       </Tab>
       <Tab eventKey="conditions" title="Conditions">
         <FieldConditions
-          conditions={[...Field.conditions]}
+          Field={Field}
           savedFields={savedFields}
           onSaveConditions={onSaveConditions}
         />

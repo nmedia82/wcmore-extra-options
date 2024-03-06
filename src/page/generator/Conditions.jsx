@@ -50,11 +50,21 @@ const Rule = ({ savedFields, rule, onRuleChange, onRemoveRule }) => (
   </Row>
 );
 
-const FieldConditions = ({ savedFields, onSaveConditions }) => {
-  //   console.log(savedFields);
-  const [visibility, setVisibility] = useState(true); // true for 'Show', false for 'Hide'
-  const [ruleBound, setRuleBound] = useState(true); // true for 'all', false for 'any'
-  const [rules, setRules] = useState([]);
+const FieldConditions = ({ Field, savedFields, onSaveConditions }) => {
+  // Convert the string values from conditions to boolean for toggles
+  //   const initialVisibility = Field.conditions?.visibility === "show";
+  //   const initialRuleBound = Field.conditions?.ruleBound === "all";
+
+  const [visibility, setVisibility] = useState(
+    Field.conditions?.visibility || "show"
+  );
+  const [ruleBound, setRuleBound] = useState(
+    Field.conditions?.ruleBound || "all"
+  );
+  const [rules, setRules] = useState(Field.conditions?.rules || []);
+
+  // exclude current field in rules
+  const ruleFields = savedFields.filter((f) => f.id !== Field.id);
 
   const handleAddRule = () => {
     setRules([...rules, { field_id: "", condition: "is", value: "" }]);
@@ -123,7 +133,7 @@ const FieldConditions = ({ savedFields, onSaveConditions }) => {
             rule={rule}
             onRuleChange={(key, value) => handleRuleChange(index, key, value)}
             onRemoveRule={() => handleRemoveRule(index)}
-            savedFields={savedFields}
+            savedFields={ruleFields}
           />
         ))}
 
