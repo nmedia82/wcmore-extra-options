@@ -1,9 +1,9 @@
 import React from "react";
 import { Row, Col, Form } from "react-bootstrap";
-import Text from "./../../fields/text";
-import Boolean from "./../../fields/boolean";
-import Select from "./../../fields/select";
-import { wcforce_get_default_options } from "../../common/helper";
+import Text from "./../fields/text";
+import Boolean from "./../fields/boolean";
+import Select from "./../fields/select";
+import { wcforce_get_default_options } from "./../../../common/helper";
 
 function Option({ option, SavedFields, onOptionMetaChange }) {
   const get_option_meta = (k) => {

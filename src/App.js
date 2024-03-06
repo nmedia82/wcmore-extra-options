@@ -8,7 +8,7 @@ import meta from "./data/meta.json";
 import useLocalStorage from "./common/useLocalStorage";
 import { toast, ToastContainer } from "react-toastify";
 import { saveExtraFields } from "./services/modalService";
-import OptionCreator from "./page/create-options";
+import FieldGenerator from "./page/generator/GenerateFields";
 
 window.WCForce_Data = {
   api_url: "https://code.wcforce.com/wp-json/wcforce/v1",
@@ -43,12 +43,12 @@ function App() {
       : null;
     if (wcforce_extra_fields) setFields([...wcforce_extra_fields]);
     setMeta([...meta]);
-  }, []);
+  }, [setFields]);
 
   return (
     <>
       <ToastContainer />
-      <OptionCreator
+      <FieldGenerator
         meta={Meta}
         SavedFields={Fields}
         onSaveMeta={handleSaveMeta}

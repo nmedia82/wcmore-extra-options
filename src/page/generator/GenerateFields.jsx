@@ -11,12 +11,13 @@ import {
   AccordionContext,
 } from "react-bootstrap";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import FieldsTabs from "./bootstrap/FieldsTabs";
+import FieldsTabs from "./FieldsTabs";
 import {
   wcforce_generate_field_id,
   wcforce_get_field_header,
   wcmore_get_field_id,
-} from "../common/helper";
+} from "../../common/helper";
+import "./style.css";
 
 const CustomToggle = ({ eventKey }) => {
   const decoratedOnClick = useAccordionButton(eventKey);
@@ -39,7 +40,7 @@ const CustomToggle = ({ eventKey }) => {
   );
 };
 
-const OptionCreator = ({ meta, SavedFields, onSaveMeta }) => {
+const FieldGenerator = ({ meta, SavedFields, onSaveMeta }) => {
   const [savedFields, setSavedFields] = useState([...SavedFields]);
 
   // Function to reorder the list after drag ends
@@ -59,6 +60,7 @@ const OptionCreator = ({ meta, SavedFields, onSaveMeta }) => {
       ...fieldType,
       id: wcmore_get_field_id(),
       options: [],
+      conditions: [],
     };
     setSavedFields((prevFields) => [...prevFields, newField]);
   };
@@ -145,6 +147,22 @@ const OptionCreator = ({ meta, SavedFields, onSaveMeta }) => {
     });
   };
 
+  const handleSaveConditions = (index, conditions) => {
+    setSavedFields((currentsavedFields) => {
+      // console.log(currentsavedFields);
+      return currentsavedFields.map((field, fieldIndex) => {
+        if (fieldIndex === index) {
+          // Find the field that needs updating
+          return {
+            ...field,
+            conditions,
+          };
+        }
+        return field; // Return all other fields unchanged
+      });
+    });
+  };
+
   return (
     <Container fluid>
       <DragDropContext onDragEnd={onDragEnd}>
@@ -207,12 +225,16 @@ const OptionCreator = ({ meta, SavedFields, onSaveMeta }) => {
                               <Accordion.Collapse eventKey={String(index)}>
                                 <Card.Body>
                                   <FieldsTabs
+                                    savedFields={savedFields}
                                     Field={field}
                                     onInputChange={(e) =>
                                       handleInputChange(index, e)
                                     }
                                     onFieldOptionChange={(options) =>
                                       handleOptionsChange(index, options)
+                                    }
+                                    onSaveConditions={(conditions) =>
+                                      handleSaveConditions(index, conditions)
                                     }
                                   />
                                 </Card.Body>
@@ -236,4 +258,4 @@ const OptionCreator = ({ meta, SavedFields, onSaveMeta }) => {
     </Container>
   );
 };
-export default OptionCreator;
+export default FieldGenerator;

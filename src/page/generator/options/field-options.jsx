@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Button, Card, ListGroup } from "react-bootstrap";
+import { Button, Card } from "react-bootstrap";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import {
   wcforce_generate_option_schema,
   wcmore_get_field_id,
-} from "../../common/helper";
+} from "./../../../common/helper";
 import Option from "./option";
 import { PlusCircleFill, TrashFill, Copy } from "react-bootstrap-icons"; // Assuming Bootstrap Icons
 
@@ -55,12 +55,13 @@ const FieldOption = ({ options, input_type, onFieldOptionChange }) => {
       if (optionIndex === index) {
         return {
           ...option,
-          [e.target.id]: e.target.value,
+          [e.target.name]: e.target.value,
         };
       }
       return option;
     });
 
+    console.log(options);
     setOptions(options);
     onFieldOptionChange(options);
   };

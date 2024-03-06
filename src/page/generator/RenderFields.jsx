@@ -1,8 +1,7 @@
 import React from "react";
-import { Form } from "react-bootstrap";
-import Text from "../../fields/text";
-import Select from "../../fields/select";
-import Boolean from "../../fields/boolean";
+import Text from "./fields/text";
+import Select from "./fields/select";
+import Boolean from "./fields/boolean";
 
 const RenderFields = ({ meta, onInputChange, handleOptionRemoval }) => {
   switch (meta.type) {

@@ -1,6 +1,6 @@
 import React from "react";
 import { Form } from "react-bootstrap";
-import { wcmore_get_field_id } from "./../common/helper";
+import { wcmore_get_field_id } from "./../../../common/helper";
 
 const Boolean = ({ meta, onMetaChange }) => {
   // Ensure meta.value is correctly interpreted as a boolean

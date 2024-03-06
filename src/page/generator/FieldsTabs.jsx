@@ -1,9 +1,16 @@
 import React, { useState } from "react";
 import { Tabs, Tab, Container, Row, Col } from "react-bootstrap";
 import RenderFields from "./RenderFields"; // Import your FieldInput component
-import FieldOption from "../options/field-options";
+import FieldOption from "./options/field-options";
+import FieldConditions from "./Conditions";
 
-const FieldsTabs = ({ Field, onInputChange, onFieldOptionChange }) => {
+const FieldsTabs = ({
+  savedFields,
+  Field,
+  onInputChange,
+  onFieldOptionChange,
+  onSaveConditions,
+}) => {
   const [key, setKey] = useState("general");
   //   console.log(Field);
   return (
@@ -33,7 +40,11 @@ const FieldsTabs = ({ Field, onInputChange, onFieldOptionChange }) => {
         />
       </Tab>
       <Tab eventKey="conditions" title="Conditions">
-        {/* Conditions logic here */}
+        <FieldConditions
+          conditions={[...Field.conditions]}
+          savedFields={savedFields}
+          onSaveConditions={onSaveConditions}
+        />
       </Tab>
     </Tabs>
   );
