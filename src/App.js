@@ -29,8 +29,8 @@ function App() {
       //   p_attached: [33],
       //   c_attached: null,
       // };
-      // const { data: response } = await saveExtraFields(post_data);
-      // console.log(response);
+      const { data: response } = await saveExtraFields(fields);
+      console.log(response);
       setFields(fields);
       console.log(fields);
       toast.success("Fields saved.");

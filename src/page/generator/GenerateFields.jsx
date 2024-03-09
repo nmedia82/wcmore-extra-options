@@ -18,6 +18,7 @@ import {
   wcmore_get_field_id,
 } from "../../common/helper";
 import "./style.css";
+import MetaAddButtons from "./MetaAddButtons";
 
 const CustomToggle = ({ eventKey }) => {
   const decoratedOnClick = useAccordionButton(eventKey);
@@ -55,7 +56,7 @@ const FieldGenerator = ({ meta, SavedFields, onSaveMeta }) => {
     setSavedFields(items);
   };
 
-  const addField = (fieldType) => {
+  const handleAddField = (fieldType) => {
     const newField = {
       ...fieldType,
       id: wcmore_get_field_id(),
@@ -70,8 +71,10 @@ const FieldGenerator = ({ meta, SavedFields, onSaveMeta }) => {
       const fieldToClone = { ...currentFields[index] };
       // Generate a new ID for the cloned field to ensure uniqueness
       fieldToClone.id = wcmore_get_field_id();
+      fieldToClone.meta = fieldToClone.meta.map((m) => ({ ...m }));
       // Optionally modify the field's title or other properties here
       const newFields = [...currentFields, fieldToClone];
+      // console.log(newFields);
       return newFields;
     });
   };
@@ -89,6 +92,7 @@ const FieldGenerator = ({ meta, SavedFields, onSaveMeta }) => {
     setSavedFields((currentSavedFields) => {
       return currentSavedFields.map((field, fieldIndex) => {
         if (fieldIndex === index) {
+          console.log(index, event.target.name);
           // Find the field that needs updating
           const updatedMeta = field.meta.map((m) => {
             if (m.name === event.target.name) {
@@ -164,22 +168,14 @@ const FieldGenerator = ({ meta, SavedFields, onSaveMeta }) => {
 
   return (
     <Container fluid>
+      <Row>
+        <Col md={12}>
+          <MetaAddButtons meta={meta} onAddField={handleAddField} />
+        </Col>
+      </Row>
       <DragDropContext onDragEnd={onDragEnd}>
         <Row>
-          <Col md={4}>
-            <ListGroup>
-              {meta.map((item, index) => (
-                <ListGroup.Item
-                  key={index}
-                  action
-                  onClick={() => addField(item)}
-                >
-                  {item.label}
-                </ListGroup.Item>
-              ))}
-            </ListGroup>
-          </Col>
-          <Col md={8}>
+          <Col md={12}>
             <Droppable droppableId="fields">
               {(provided) => (
                 <div {...provided.droppableProps} ref={provided.innerRef}>
@@ -248,12 +244,17 @@ const FieldGenerator = ({ meta, SavedFields, onSaveMeta }) => {
                 </div>
               )}
             </Droppable>
-            <Button variant="primary" onClick={() => onSaveMeta(savedFields)}>
+            <Button variant="success" onClick={() => onSaveMeta(savedFields)}>
               Save Field
             </Button>
           </Col>
         </Row>
       </DragDropContext>
+      <Row>
+        <Col md={12}>
+          <MetaAddButtons meta={meta} onAddField={handleAddField} />
+        </Col>
+      </Row>
     </Container>
   );
 };
