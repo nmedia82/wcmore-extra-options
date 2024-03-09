@@ -20,20 +20,18 @@ function App() {
   const [Fields, setFields] = useLocalStorage("wcmore_fields", []);
   const [FrontendFieldsMeta, setFrontendFieldsMeta] = useState([]);
 
-  const handleSaveMeta = async (fields) => {
+  const handleSaveMeta = async (title, fields) => {
     try {
-      // const post_data = {
-      //   title: "Meta One",
-      //   meta: fields,
-      //   settings: { title: "yes" },
-      //   p_attached: [33],
-      //   c_attached: null,
-      // };
-      const { data: response } = await saveExtraFields(fields);
+      const post_data = {
+        title,
+        fields: JSON.stringify(fields),
+      };
+      const { data: response } = await saveExtraFields(post_data);
       console.log(response);
-      setFields(fields);
-      console.log(fields);
-      toast.success("Fields saved.");
+      if (response.success) {
+        setFields(fields);
+        toast.success("Fields saved.");
+      }
     } catch (e) {
       toast.error(e.message); // Assuming `e.get_message()` was a typo and should be `e.message`
     }

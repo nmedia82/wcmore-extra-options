@@ -9,6 +9,7 @@ import {
   Card,
   useAccordionButton,
   AccordionContext,
+  Form,
 } from "react-bootstrap";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import FieldsTabs from "./FieldsTabs";
@@ -43,6 +44,7 @@ const CustomToggle = ({ eventKey }) => {
 
 const FieldGenerator = ({ meta, SavedFields, onSaveMeta }) => {
   const [savedFields, setSavedFields] = useState([...SavedFields]);
+  const [fieldTitle, setFieldTitle] = useState("");
 
   // Function to reorder the list after drag ends
   const onDragEnd = (result) => {
@@ -176,6 +178,15 @@ const FieldGenerator = ({ meta, SavedFields, onSaveMeta }) => {
       <DragDropContext onDragEnd={onDragEnd}>
         <Row>
           <Col md={12}>
+            <Form.Group controlId="exampleForm.ControlInput1">
+              <Form.Control
+                onChange={(e) => setFieldTitle(e.target.value)}
+                size="lg"
+                type="text"
+                placeholder="Extra fields group title"
+              />
+              <div className="border-bottom mt-3 mb-3"></div>
+            </Form.Group>
             <Droppable droppableId="fields">
               {(provided) => (
                 <div {...provided.droppableProps} ref={provided.innerRef}>
@@ -244,7 +255,10 @@ const FieldGenerator = ({ meta, SavedFields, onSaveMeta }) => {
                 </div>
               )}
             </Droppable>
-            <Button variant="success" onClick={() => onSaveMeta(savedFields)}>
+            <Button
+              variant="success"
+              onClick={() => onSaveMeta(fieldTitle, savedFields)}
+            >
               Save Field
             </Button>
           </Col>
