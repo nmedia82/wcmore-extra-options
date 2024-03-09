@@ -21,9 +21,21 @@ function App() {
   const [FrontendFieldsMeta, setFrontendFieldsMeta] = useState([]);
 
   const handleSaveMeta = async (title, fields) => {
+    if (!title) {
+      return toast.error("Group title is required");
+    }
+
+    // Get the current URL
+    const currentUrl = window.location.href;
+    // Create a URLSearchParams object
+    const searchParams = new URLSearchParams(new URL(currentUrl).search);
+    // Read 'post' query parameter
+    const group_id = searchParams.get("post");
+
     try {
       const post_data = {
         title,
+        group_id,
         fields: JSON.stringify(fields),
       };
       const { data: response } = await saveExtraFields(post_data);
