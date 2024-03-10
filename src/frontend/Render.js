@@ -1,11 +1,18 @@
 import { useState, useEffect } from "react";
 import "./Render.css";
-import settings from "./../data/settings.json";
+import "react-toastify/dist/ReactToastify.css";
+import config from "./../services/config.json";
 import { FieldClass } from "./FieldClass";
 import Field from "./field";
 import FieldMaterial from "./field-material";
 import { Grid, Paper, styled } from "@mui/material";
 import PriceDisplay from "./price";
+import {
+  wcforce_get_group_id,
+  wcforce_generate_fields_meta,
+} from "../common/helper";
+import { getExtraFields } from "../services/modalService";
+import { toast, ToastContainer } from "react-toastify";
 
 const Item = styled("div")({
   color: "darkslategray",
@@ -15,9 +22,7 @@ const Item = styled("div")({
   minHeight: 50,
 });
 
-const fields = window.wcforce_saved_fields
-  ? JSON.parse(window.wcforce_saved_fields)
-  : JSON.parse(localStorage.getItem("wcmore_fields"));
+const { render_ui } = config;
 
 // console.log(settings);
 function Render() {
@@ -26,35 +31,53 @@ function Render() {
   const [ConditionallyBound, setConditionallyBound] = useState([]);
   const [CartData, setCartData] = useState([]);
 
+  const group_id = wcforce_get_group_id();
+
   useEffect(() => {
     // find active conditions
 
-    const filter = fields
-      .filter((f) => f.status)
-      .map((f) => ({ ...f, is_hidden: is_conditionally_hidden(f) }));
-    let conditions = {};
-    let conditionally_bound = [];
-    // console.log(filter);
-    for (let field of filter) {
-      if (!field.conditions.status) continue;
-      conditions = { ...conditions, [field.field_id]: field.conditions };
-      conditionally_bound = [
-        ...conditionally_bound,
-        ...field.conditions.rules.map((r) => r.field),
-      ];
-    }
+    // const filter = fields
+    //   .filter((f) => f.status)
+    //   .map((f) => ({ ...f, is_hidden: is_conditionally_hidden(f) }));
+    // let conditions = {};
+    // let conditionally_bound = [];
+    // // console.log(filter);
+    // for (let field of filter) {
+    //   if (!field.conditions.status) continue;
+    //   conditions = { ...conditions, [field.field_id]: field.conditions };
+    //   conditionally_bound = [
+    //     ...conditionally_bound,
+    //     ...field.conditions.rules.map((r) => r.field),
+    //   ];
+    // }
 
-    // getting uniqe conditionally_bound
-    conditionally_bound = conditionally_bound.filter(
-      (value, index, self) => self.indexOf(value) === index
-    );
+    // // getting uniqe conditionally_bound
+    // conditionally_bound = conditionally_bound.filter(
+    //   (value, index, self) => self.indexOf(value) === index
+    // );
 
-    setConditions(conditions);
-    setConditionallyBound(conditionally_bound);
+    // setConditions(conditions);
+    // setConditionallyBound(conditionally_bound);
 
-    // console.log(filter, conditions, conditionally_bound);
-    setFields(filter);
-  }, []);
+    // // console.log(filter, conditions, conditionally_bound);
+    // setFields(filter);
+
+    const loadData = async () => {
+      if (!group_id) return;
+      try {
+        const { data: savedFields } = await getExtraFields(group_id);
+        if (savedFields && savedFields.length > 0) {
+          const fields = await wcforce_generate_fields_meta(savedFields);
+          setFields(fields);
+        }
+      } catch (error) {
+        console.error("Failed to load extra fields:", error);
+        toast.error("Failed to load extra fields.");
+      }
+    };
+
+    loadData();
+  }, [group_id]);
 
   const handleFieldChange = (e, meta) => {
     // console.log(e.target.value, meta);
@@ -189,17 +212,19 @@ function Render() {
 
   return (
     <div className="wcforce-extra-fields-wrapper">
+      <ToastContainer />
       <PriceDisplay CartData={CartData} Hello={"hi"} />
       <input
         type="hidden"
         name="wcforce_cart_data"
         value={JSON.stringify(CartData)}
       />
-      {settings.ui === "normal" &&
+      {render_ui === "normal" &&
         Fields.map((field) => {
+          console.log(field);
           const FieldObj = new FieldClass(field, ConditionallyBound);
           return (
-            <div key={field._id} className={getWrapperClass(field)}>
+            <div key={field.id} className={getWrapperClass(field)}>
               <Field
                 field={field}
                 onFieldChange={handleFieldChange}
@@ -210,12 +235,12 @@ function Render() {
           );
         })}
 
-      {settings.ui === "material" && (
+      {render_ui === "material" && (
         <Grid container spacing={0}>
           {Fields.map((field) => {
             const FieldObj = new FieldClass(field, ConditionallyBound);
             return (
-              <Grid key={field._id} item xs={FieldObj.col()}>
+              <Grid key={field.id} item xs={FieldObj.col()}>
                 <div className={getWrapperClass(field)}>
                   <Item>
                     <FieldMaterial

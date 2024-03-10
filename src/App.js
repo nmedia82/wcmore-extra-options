@@ -1,70 +1,66 @@
 import React, { useState, useEffect } from "react";
-// import { ToastContainer, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import "react-toastify/dist/ReactToastify.css"; // Import Toastify CSS
+import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
-import meta from "./data/meta.json";
 import useLocalStorage from "./common/useLocalStorage";
 import { toast, ToastContainer } from "react-toastify";
-import { saveExtraFields } from "./services/modalService";
+import {
+  getExtraFields,
+  getMeta,
+  saveExtraFields,
+} from "./services/modalService";
 import FieldGenerator from "./page/generator/GenerateFields";
-import { wcforce_generate_fields_meta } from "./common/helper";
+import { wcforce_get_group_id } from "./common/helper";
 
-window.WCForce_Data = {
-  api_url: "https://code.wcforce.com/wp-json/wcforce/v1",
-};
-
-function App() {
+const App = () => {
   const [Meta, setMeta] = useState([]);
-  const [Fields, setFields] = useLocalStorage("wcmore_fields", []);
-  const [FrontendFieldsMeta, setFrontendFieldsMeta] = useState([]);
+  const [Fields, setFields] = useLocalStorage("wcforce_fields", []);
 
-  const handleSaveMeta = async (title, fields) => {
-    if (!title) {
-      return toast.error("Group title is required");
+  const group_id = wcforce_get_group_id();
+
+  const handleSaveMeta = async (fields) => {
+    if (fields.length === 0) {
+      toast.error("At least one field is required");
+      return;
     }
-
-    // Get the current URL
-    const currentUrl = window.location.href;
-    // Create a URLSearchParams object
-    const searchParams = new URLSearchParams(new URL(currentUrl).search);
-    // Read 'post' query parameter
-    const group_id = searchParams.get("post");
 
     try {
       const post_data = {
-        title,
         group_id,
         fields: JSON.stringify(fields),
       };
       const { data: response } = await saveExtraFields(post_data);
-      console.log(response);
       if (response.success) {
         setFields(fields);
-        toast.success("Fields saved.");
+        toast.success("Fields saved successfully.");
+      } else {
+        toast.error("Failed to save fields.");
       }
-    } catch (e) {
-      toast.error(e.message); // Assuming `e.get_message()` was a typo and should be `e.message`
+    } catch (error) {
+      toast.error(error.message || "An error occurred while saving fields.");
     }
   };
 
   useEffect(() => {
-    const wcforce_extra_fields = window.wcforce_saved_fields
-      ? JSON.parse(window.wcforce_saved_fields)
-      : null;
-    if (wcforce_extra_fields) setFields([...wcforce_extra_fields]);
-    setMeta([...meta]);
+    const loadData = async () => {
+      if (!group_id) return;
+      try {
+        const { data: savedFields } = await getExtraFields(group_id);
+        if (savedFields && savedFields.length > 0) {
+          setFields(savedFields);
+        }
 
-    wcforce_generate_fields_meta(Fields)
-      .then((frontendFields) => {
-        console.log("Transformed Fields:", frontendFields);
-        // Perform further actions with the transformed fields
-      })
-      .catch((error) => {
-        console.error("Error transforming fields:", error);
-      });
-  }, [Fields, setFields]);
+        const { data: meta } = await getMeta();
+        setMeta(meta);
+      } catch (error) {
+        console.error("Failed to load extra fields:", error);
+        toast.error("Failed to load extra fields.");
+      }
+    };
+
+    loadData();
+  }, [group_id, setFields]);
 
   return (
     <>
@@ -76,6 +72,6 @@ function App() {
       />
     </>
   );
-}
+};
 
 export default App;

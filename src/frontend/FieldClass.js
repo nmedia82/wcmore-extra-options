@@ -24,7 +24,7 @@ export class FieldClass {
     return this.field.prefix;
   }
   input_type() {
-    return this.field.input_type;
+    return this.field.input;
   }
   default_value() {
     if (this.has_multi_values())

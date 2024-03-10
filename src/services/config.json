@@ -1,3 +1,4 @@
 {
-  "api_url": "https://plugins.nmdevteam.com/wp-json/wcforce/v1"
+  "api_url": "https://plugins.nmdevteam.com/wp-json/wcforce/v1",
+  "render_ui": "material"
 }

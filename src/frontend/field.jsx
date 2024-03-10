@@ -5,12 +5,13 @@ import Boolean from "./fields/boolean";
 import Select from "./fields/select";
 import Checkbox from "./fields/checkbox";
 import Radio from "./fields/radio";
-// import AutoComplete from "./fields/material/autocomplete" 
+// import AutoComplete from "./fields/material/autocomplete"
 
 const Field = ({ field, onFieldChange, ConditionallyBound }) => {
+  console.log(field);
   const FieldObj = new FieldClass(field, ConditionallyBound);
   // FieldObj.input_attributes();
-  switch (field.input_type) {
+  switch (field.input) {
     case "email":
     case "number":
     case "url":

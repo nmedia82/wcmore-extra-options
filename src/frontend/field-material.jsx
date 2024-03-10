@@ -11,7 +11,7 @@ import SelectMaterial from "./fields/material/select";
 const FieldMaterial = ({ field, onFieldChange, ConditionallyBound }) => {
   const FieldObj = new FieldClass(field, ConditionallyBound);
   // FieldObj.input_attributes();
-  switch (field.input_type) {
+  switch (field.input) {
     case "email":
     case "number":
     case "url":

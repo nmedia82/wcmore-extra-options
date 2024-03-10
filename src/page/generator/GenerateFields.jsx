@@ -44,7 +44,6 @@ const CustomToggle = ({ eventKey }) => {
 
 const FieldGenerator = ({ meta, SavedFields, onSaveMeta }) => {
   const [savedFields, setSavedFields] = useState([...SavedFields]);
-  const [fieldTitle, setFieldTitle] = useState("");
 
   // Function to reorder the list after drag ends
   const onDragEnd = (result) => {
@@ -58,14 +57,18 @@ const FieldGenerator = ({ meta, SavedFields, onSaveMeta }) => {
     setSavedFields(items);
   };
 
-  const handleAddField = (fieldType) => {
+  const handleAddField = (fieldType, position) => {
     const newField = {
       ...fieldType,
       id: wcmore_get_field_id(),
       options: [],
       conditions: {},
     };
-    setSavedFields((prevFields) => [...prevFields, newField]);
+    const new_field =
+      position === "top"
+        ? [newField, ...savedFields]
+        : [...savedFields, newField];
+    setSavedFields(new_field);
   };
 
   const cloneField = (index) => {
@@ -94,7 +97,6 @@ const FieldGenerator = ({ meta, SavedFields, onSaveMeta }) => {
     setSavedFields((currentSavedFields) => {
       return currentSavedFields.map((field, fieldIndex) => {
         if (fieldIndex === index) {
-          console.log(index, event.target.name);
           // Find the field that needs updating
           const updatedMeta = field.meta.map((m) => {
             if (m.name === event.target.name) {
@@ -172,21 +174,16 @@ const FieldGenerator = ({ meta, SavedFields, onSaveMeta }) => {
     <Container fluid>
       <Row>
         <Col md={12}>
-          <MetaAddButtons meta={meta} onAddField={handleAddField} />
+          <MetaAddButtons
+            meta={meta}
+            onAddField={(item) => handleAddField(item, "top")}
+          />
+          <div className="border-bottom mt-2 mb-3"></div>
         </Col>
       </Row>
       <DragDropContext onDragEnd={onDragEnd}>
         <Row>
           <Col md={12}>
-            <Form.Group controlId="exampleForm.ControlInput1">
-              <Form.Control
-                onChange={(e) => setFieldTitle(e.target.value)}
-                size="lg"
-                type="text"
-                placeholder="Extra fields group title"
-              />
-              <div className="border-bottom mt-3 mb-3"></div>
-            </Form.Group>
             <Droppable droppableId="fields">
               {(provided) => (
                 <div {...provided.droppableProps} ref={provided.innerRef}>
@@ -255,18 +252,21 @@ const FieldGenerator = ({ meta, SavedFields, onSaveMeta }) => {
                 </div>
               )}
             </Droppable>
-            <Button
-              variant="success"
-              onClick={() => onSaveMeta(fieldTitle, savedFields)}
-            >
-              Save Field
-            </Button>
+            <div className="d-flex justify-content-center">
+              <Button variant="success" onClick={() => onSaveMeta(savedFields)}>
+                Save Field
+              </Button>
+            </div>
           </Col>
         </Row>
       </DragDropContext>
       <Row>
         <Col md={12}>
-          <MetaAddButtons meta={meta} onAddField={handleAddField} />
+          <div className="border-bottom mt-2 mb-3"></div>
+          <MetaAddButtons
+            meta={meta}
+            onAddField={(item) => handleAddField(item, "bottom")}
+          />
         </Col>
       </Row>
     </Container>

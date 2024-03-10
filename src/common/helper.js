@@ -121,3 +121,10 @@ export const wcforce_generate_fields_meta = (Fields) => {
     resolve(frontend_fields);
   });
 };
+
+// Extract 'group_id' from the URL search params
+export const wcforce_get_group_id = () => {
+  const currentUrl = window.location.href;
+  const searchParams = new URLSearchParams(new URL(currentUrl).search);
+  return searchParams.get("post");
+};
