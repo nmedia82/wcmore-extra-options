@@ -1,0 +1,78 @@
+[
+  {
+    "id": "lJKYh",
+    "input": "radio",
+    "options": [
+      {
+        "label": "Male",
+        "price": "",
+        "weight": "",
+        "discount": "",
+        "stock": "",
+        "option_id": "actfR",
+        "icon_delete": "",
+        "icon_clone": ""
+      }
+    ],
+    "conditions": {},
+    "title": "Ge",
+    "field_id": "ge"
+  },
+  {
+    "id": "fBek4",
+    "input": "text",
+    "options": [],
+    "conditions": {
+      "visibility": "show",
+      "ruleBound": "any",
+      "rules": [
+        {
+          "field_id": "ge",
+          "condition": "is",
+          "value": "Male"
+        }
+      ]
+    },
+    "title": "Shirt size",
+    "field_id": "shirt_size"
+  },
+  {
+    "id": "ils8f",
+    "input": "number",
+    "options": [],
+    "conditions": {
+      "visibility": "show",
+      "ruleBound": "any",
+      "rules": [
+        {
+          "field_id": "ge",
+          "condition": "is",
+          "value": "Male"
+        }
+      ]
+    },
+    "title": "Age",
+    "field_id": "age"
+  },
+  {
+    "id": "3lZn6",
+    "input": "url",
+    "options": [],
+    "conditions": {
+      "visibility": "show",
+      "ruleBound": "any",
+      "rules": [
+        {
+          "field_id": "ge",
+          "condition": "is",
+          "value": "Male"
+        }
+      ]
+    },
+    "title": "Website URL",
+    "field_id": "website_url",
+    "hide_in_cart": true,
+    "is_required": true,
+    "col": "6"
+  }
+]
