@@ -17,6 +17,9 @@ export class FieldClass {
     if (this.field.type === "text") placeholder = this.field.title;
     return placeholder;
   }
+  title() {
+    return this.field.title;
+  }
   description() {
     return this.field.description;
   }
@@ -35,14 +38,14 @@ export class FieldClass {
     return this.field.options !== undefined ? this.field.options : [];
   }
   col() {
-    return this.field.col !== "" ? Number(this.field.col) : 12;
+    return this.field.col ? Number(this.field.col) : 12;
   }
   required() {
-    return !this.field.required ? false : true;
+    return !this.field.is_required ? false : true;
   }
 
   class() {
-    let classname = `wcforce-field ${this.field.field_id} ${this.field.input_type}`;
+    let classname = `wcforce-field ${this.field.field_id} ${this.field.input}`;
     if (this.conditionally_bound.includes(this.id())) {
       classname += " conditionally-bound";
     }
@@ -64,7 +67,7 @@ export class FieldClass {
     }
   }
   label_class() {
-    return `wcforce-label ${this.field.field_id} ${this.field.type} ${this.field.input_type}`;
+    return `wcforce-label ${this.field.field_id} ${this.input_type()}`;
   }
 
   input_attributes() {

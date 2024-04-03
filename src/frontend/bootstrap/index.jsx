@@ -1,15 +1,14 @@
-import { FieldClass } from "./FieldClass";
-import Text from "./fields/text";
-import Boolean from "./fields/boolean";
+import Text from "./text";
+import Boolean from "./boolean";
 // import "./fields/input.css";
-import Select from "./fields/select";
-import Checkbox from "./fields/checkbox";
-import Radio from "./fields/radio";
+import Select from "./select";
+import Checkbox from "./checkbox";
+import Radio from "./radio";
 // import AutoComplete from "./fields/material/autocomplete"
 
-const Field = ({ field, onFieldChange, ConditionallyBound }) => {
-  console.log(field);
-  const FieldObj = new FieldClass(field, ConditionallyBound);
+const BootstrapFields = ({ field, onFieldChange, FieldObj }) => {
+  // console.log(field);
+
   // FieldObj.input_attributes();
   switch (field.input) {
     case "email":
@@ -58,4 +57,4 @@ const Field = ({ field, onFieldChange, ConditionallyBound }) => {
   }
 };
 
-export default Field;
+export default BootstrapFields;

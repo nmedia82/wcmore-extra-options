@@ -1,14 +1,13 @@
-import { FieldClass } from "./FieldClass";
-import Text from "./fields/material/text";
-import RadioMaterial from "./fields/material/radio";
+import { FieldClass } from "../FieldClass";
+import Text from "./text";
+import RadioMaterial from "./radio";
 // import "./fields/input.css";
 
-import CheckboxMaterial from "./fields/material/checkbox";
-import Radio from "./fields/radio";
-import AutoComplete from "./fields/material/autocomplete";
-import SelectMaterial from "./fields/material/select";
+import CheckboxMaterial from "./checkbox";
+import AutoComplete from "./autocomplete";
+import SelectMaterial from "./select";
 
-const FieldMaterial = ({ field, onFieldChange, ConditionallyBound }) => {
+const MaterialFields = ({ field, onFieldChange, ConditionallyBound }) => {
   const FieldObj = new FieldClass(field, ConditionallyBound);
   // FieldObj.input_attributes();
   switch (field.input) {
@@ -61,4 +60,4 @@ const FieldMaterial = ({ field, onFieldChange, ConditionallyBound }) => {
   }
 };
 
-export default FieldMaterial;
+export default MaterialFields;

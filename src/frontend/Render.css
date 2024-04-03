@@ -1,9 +1,13 @@
 .wcforce-extra-fields-wrapper {
-  /* width: 80%;
+  width: 80%;
   margin: 0 auto;
-  border: 1px solid;  
-  padding: 10px; */
+  border: 1px solid;
+  padding: 10px;
 }
 .conditionally-hidden {
   display: none;
+}
+
+.wcforce-field-wrapper {
+  margin-bottom: 5px;
 }

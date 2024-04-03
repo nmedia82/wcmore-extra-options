@@ -3,8 +3,8 @@ import "./Render.css";
 import "react-toastify/dist/ReactToastify.css";
 import config from "./../services/config.json";
 import { FieldClass } from "./FieldClass";
-import Field from "./field";
-import FieldMaterial from "./field-material";
+import BootstrapFields from "./bootstrap/";
+import MaterialFields from "./material-ui";
 import { Grid, Paper, styled } from "@mui/material";
 import PriceDisplay from "./price";
 import {
@@ -13,6 +13,7 @@ import {
 } from "../common/helper";
 import { getExtraFields } from "../services/modalService";
 import { toast, ToastContainer } from "react-toastify";
+import { Col, Container, Row } from "react-bootstrap";
 
 const Item = styled("div")({
   color: "darkslategray",
@@ -66,8 +67,10 @@ function Render() {
       if (!group_id) return;
       try {
         const { data: savedFields } = await getExtraFields(group_id);
+        console.log(savedFields);
         if (savedFields && savedFields.length > 0) {
           const fields = await wcforce_generate_fields_meta(savedFields);
+          console.log(fields);
           setFields(fields);
         }
       } catch (error) {
@@ -80,7 +83,7 @@ function Render() {
   }, [group_id]);
 
   const handleFieldChange = (e, meta) => {
-    // console.log(e.target.value, meta);
+    console.log(e.target.value, meta);
     let value = meta.input_type === "checkbox" ? [] : "";
     if (meta.input_type === "checkbox") {
       const { value: opt_value, checked } = e.target;
@@ -137,7 +140,7 @@ function Render() {
     const index = fields.indexOf(found);
     fields[index].value = value.value;
 
-    // console.log(CartData);
+    console.log(cart_data);
 
     // if conditionally bound
     if (ConditionallyBound.includes(meta.field_id)) {
@@ -203,7 +206,7 @@ function Render() {
   };
 
   const getWrapperClass = (field) => {
-    let classname = `wcforce-field-wrapper ${field.type} ${field.field_id}`;
+    let classname = `wcforce-field-wrapper ${field.input} ${field.field_id}`;
     if (field.is_hidden) {
       classname += " conditionally-hidden";
     }
@@ -213,27 +216,30 @@ function Render() {
   return (
     <div className="wcforce-extra-fields-wrapper">
       <ToastContainer />
-      <PriceDisplay CartData={CartData} Hello={"hi"} />
+      {/* <PriceDisplay CartData={CartData} Hello={"hi"} /> */}
       <input
         type="hidden"
         name="wcforce_cart_data"
         value={JSON.stringify(CartData)}
       />
-      {render_ui === "normal" &&
-        Fields.map((field) => {
-          console.log(field);
-          const FieldObj = new FieldClass(field, ConditionallyBound);
-          return (
-            <div key={field.id} className={getWrapperClass(field)}>
-              <Field
-                field={field}
-                onFieldChange={handleFieldChange}
-                ConditionallyBound={ConditionallyBound}
-                FieldObj={FieldObj}
-              />
-            </div>
-          );
-        })}
+
+      {render_ui === "bootstrap" && (
+        <Row>
+          {Fields.map((field) => {
+            const FieldObj = new FieldClass(field, ConditionallyBound);
+            // console.log(FieldObj);
+            return (
+              <Col key={field.id} xs={FieldObj.col()}>
+                <BootstrapFields
+                  field={field}
+                  onFieldChange={handleFieldChange}
+                  FieldObj={FieldObj}
+                />
+              </Col>
+            );
+          })}
+        </Row>
+      )}
 
       {render_ui === "material" && (
         <Grid container spacing={0}>
@@ -243,7 +249,7 @@ function Render() {
               <Grid key={field.id} item xs={FieldObj.col()}>
                 <div className={getWrapperClass(field)}>
                   <Item>
-                    <FieldMaterial
+                    <MaterialFields
                       field={field}
                       onFieldChange={handleFieldChange}
                       ConditionallyBound={ConditionallyBound}

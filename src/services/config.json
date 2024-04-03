@@ -1,4 +1,4 @@
 {
   "api_url": "https://plugins.nmdevteam.com/wp-json/wcforce/v1",
-  "render_ui": "material"
+  "render_ui": "bootstrap"
 }
