@@ -1,15 +1,17 @@
 {
   "files": {
-    "main.css": "/wcmore-extra-options/static/css/main.e5096872.css",
-    "main.js": "/wcmore-extra-options/static/js/main.d6451359.js",
+    "main.css": "/wcmore-extra-options/static/css/main.138586eb.css",
+    "main.js": "/wcmore-extra-options/static/js/main.2147bf60.js",
     "static/js/787.aa9cc4ce.chunk.js": "/wcmore-extra-options/static/js/787.aa9cc4ce.chunk.js",
+    "static/media/bootstrap-icons.woff?": "/wcmore-extra-options/static/media/bootstrap-icons.39795c0b4513de014cf8.woff",
+    "static/media/bootstrap-icons.woff2?": "/wcmore-extra-options/static/media/bootstrap-icons.b7bcc075b395c14ce8c2.woff2",
     "index.html": "/wcmore-extra-options/index.html",
-    "main.e5096872.css.map": "/wcmore-extra-options/static/css/main.e5096872.css.map",
-    "main.d6451359.js.map": "/wcmore-extra-options/static/js/main.d6451359.js.map",
+    "main.138586eb.css.map": "/wcmore-extra-options/static/css/main.138586eb.css.map",
+    "main.2147bf60.js.map": "/wcmore-extra-options/static/js/main.2147bf60.js.map",
     "787.aa9cc4ce.chunk.js.map": "/wcmore-extra-options/static/js/787.aa9cc4ce.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.e5096872.css",
-    "static/js/main.d6451359.js"
+    "static/css/main.138586eb.css",
+    "static/js/main.2147bf60.js"
   ]
 }
