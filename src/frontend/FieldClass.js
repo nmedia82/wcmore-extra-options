@@ -6,8 +6,8 @@ export class FieldClass {
 
   name() {
     if (this.input_type() === "checkbox")
-      return `wcforce[][${this.field.field_id}][]`;
-    return `wcforce[][${this.field.field_id}]`;
+      return `wcforce[${this.field.field_id}][]`;
+    return `wcforce[${this.field.field_id}]`;
   }
   id() {
     return this.field.field_id;

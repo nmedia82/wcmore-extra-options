@@ -5,15 +5,11 @@ import config from "./../services/config.json";
 import { FieldClass } from "./FieldClass";
 import BootstrapFields from "./bootstrap/";
 import MaterialFields from "./material-ui";
-import { Grid, Paper, styled } from "@mui/material";
-import PriceDisplay from "./price";
-import {
-  wcforce_get_group_id,
-  wcforce_generate_fields_meta,
-} from "../common/helper";
-import { getExtraFields } from "../services/modalService";
+import { Grid, styled } from "@mui/material";
+import { wcforce_get_group_id } from "../common/helper";
+import { getProductExtraFields } from "../services/modalService";
 import { toast, ToastContainer } from "react-toastify";
-import { Col, Container, Row } from "react-bootstrap";
+import { Col, Row } from "react-bootstrap";
 
 const Item = styled("div")({
   color: "darkslategray",
@@ -37,42 +33,40 @@ function Render() {
   useEffect(() => {
     // find active conditions
 
-    // const filter = fields
-    //   .filter((f) => f.status)
-    //   .map((f) => ({ ...f, is_hidden: is_conditionally_hidden(f) }));
-    // let conditions = {};
-    // let conditionally_bound = [];
-    // // console.log(filter);
-    // for (let field of filter) {
-    //   if (!field.conditions.status) continue;
-    //   conditions = { ...conditions, [field.field_id]: field.conditions };
-    //   conditionally_bound = [
-    //     ...conditionally_bound,
-    //     ...field.conditions.rules.map((r) => r.field),
-    //   ];
-    // }
-
-    // // getting uniqe conditionally_bound
-    // conditionally_bound = conditionally_bound.filter(
-    //   (value, index, self) => self.indexOf(value) === index
-    // );
-
-    // setConditions(conditions);
-    // setConditionallyBound(conditionally_bound);
-
-    // // console.log(filter, conditions, conditionally_bound);
     // setFields(filter);
 
     const loadData = async () => {
-      if (!group_id) return;
+      if (!window.wcforce_product_id) return;
       try {
-        const { data: savedFields } = await getExtraFields(group_id);
-        console.log(savedFields);
-        if (savedFields && savedFields.length > 0) {
-          const fields = await wcforce_generate_fields_meta(savedFields);
-          console.log(fields);
-          setFields(fields);
+        const { data: fields } = await getProductExtraFields(
+          window.wcforce_product_id
+        );
+        const filter = fields
+          .filter((f) => f.status)
+          .map((f) => ({ ...f, is_hidden: is_conditionally_hidden(f) }));
+        let conditions = {};
+        let conditionally_bound = [];
+        // console.log(filter);
+        for (let field of filter) {
+          if (!field.conditions.status) continue;
+          conditions = { ...conditions, [field.field_id]: field.conditions };
+          conditionally_bound = [
+            ...conditionally_bound,
+            ...field.conditions.rules.map((r) => r.field),
+          ];
         }
+
+        // getting uniqe conditionally_bound
+        conditionally_bound = conditionally_bound.filter(
+          (value, index, self) => self.indexOf(value) === index
+        );
+
+        setConditions(conditions);
+        setConditionallyBound(conditionally_bound);
+
+        console.log(filter, conditions, conditionally_bound);
+
+        setFields(fields);
       } catch (error) {
         console.error("Failed to load extra fields:", error);
         toast.error("Failed to load extra fields.");
@@ -160,50 +154,101 @@ function Render() {
     setCartData(cart_data);
   };
 
-  const is_conditionally_hidden = (f, user_values = []) => {
-    const { bound, rules, status, visibility } = f.conditions;
-    if (!status) return false;
-    const _true = visibility === "show" ? false : true;
-    // console.log(rules.length === matched_rules(rules, user_values), !_true);
-    if (bound === "all" && rules.length === matched_rules(rules, user_values)) {
-      return _true;
+  // Determines if a field should be hidden based on its conditions and user input values
+  const is_conditionally_hidden = (field, user_values = []) => {
+    if (!field.conditions || !field.conditions.status) {
+      // If there are no conditions or the conditions are not active, don't hide the field
+      return false;
     }
-    if (bound === "any" && 0 < matched_rules(rules, user_values)) {
-      return _true;
+
+    const { visibility, ruleBound, rules } = field.conditions;
+    const shouldHideByDefault = visibility !== "show";
+    const ruleMatches = rules.map((rule) => matchRule(rule, user_values));
+
+    const anyRuleMatched = ruleMatches.some(Boolean);
+    const allRulesMatched = ruleMatches.every(Boolean);
+
+    switch (ruleBound) {
+      case "all":
+        return shouldHideByDefault ? !allRulesMatched : allRulesMatched;
+      case "any":
+        return shouldHideByDefault ? !anyRuleMatched : anyRuleMatched;
+      default:
+        return false;
     }
-    return !_true;
   };
 
-  const matched_rules = (rules, user_values) => {
-    let matched_rules = 0;
-    for (let rule of rules) {
-      // console.log(rules);
-      const { field, operator, value } = rule;
-      const found = user_values.find((m) => m.field_id === field);
-      // console.log(found, `${found} === ${value}`);
-      if (!found) continue;
-      // array values
-      if (found.input_type === "checkbox") {
-        const found_values = found.value.map((v) => v.label);
-        // console.log(found_values);
-        if (operator === "is" && found_values.includes(value)) matched_rules++;
-        if (operator === "not" && !found_values.includes(value))
-          matched_rules++;
-      } else if (found.type === "options" && found.input_type !== "checkbox") {
-        const { label: cart_value } = found.value;
-        if (operator === "is" && cart_value === value) matched_rules++;
-        if (operator === "not" && cart_value !== value) matched_rules++;
-      } else {
-        if (operator === "is" && found.value === value) matched_rules++;
-        if (operator === "not" && found.value !== value) matched_rules++;
-        if (operator === "greater than" && Number(found.value) > Number(value))
-          matched_rules++;
-        if (operator === "less than" && Number(found.value) < Number(value))
-          matched_rules++;
-      }
+  // Helper function to check if a specific rule matches user input values
+  const matchRule = (rule, user_values) => {
+    const userValue = user_values.find(
+      (value) => value.field_id === rule.field_id
+    )?.value;
+
+    switch (rule.condition) {
+      case "is":
+        return Array.isArray(userValue)
+          ? userValue.includes(rule.value)
+          : userValue === rule.value;
+      case "not":
+        return Array.isArray(userValue)
+          ? !userValue.includes(rule.value)
+          : userValue !== rule.value;
+      case "greater than":
+        return Number(userValue) > Number(rule.value);
+      case "less than":
+        return Number(userValue) < Number(rule.value);
+      default:
+        return false;
     }
-    return matched_rules;
   };
+
+  // const is_conditionally_hidden = (f, user_values = []) => {
+  //   const { ruleBound, rules, status, visibility } = f.conditions;
+  //   // if (!status) return false;
+  //   const _true = visibility === "show" ? false : true;
+  //   // console.log(rules.length === matched_rules(rules, user_values), !_true);
+  //   if (
+  //     ruleBound === "all" &&
+  //     rules.length === matched_rules(rules, user_values)
+  //   ) {
+  //     return _true;
+  //   }
+  //   if (ruleBound === "any" && 0 < matched_rules(rules, user_values)) {
+  //     return _true;
+  //   }
+  //   return !_true;
+  // };
+
+  // const matched_rules = (rules, user_values) => {
+  //   let matched_rules = 0;
+  //   for (let rule of rules) {
+  //     // console.log(rules);
+  //     const { field, operator, value } = rule;
+  //     const found = user_values.find((m) => m.field_id === field);
+  //     // console.log(found, `${found} === ${value}`);
+  //     if (!found) continue;
+  //     // array values
+  //     if (found.input_type === "checkbox") {
+  //       const found_values = found.value.map((v) => v.label);
+  //       // console.log(found_values);
+  //       if (operator === "is" && found_values.includes(value)) matched_rules++;
+  //       if (operator === "not" && !found_values.includes(value))
+  //         matched_rules++;
+  //     } else if (found.type === "options" && found.input_type !== "checkbox") {
+  //       const { label: cart_value } = found.value;
+  //       if (operator === "is" && cart_value === value) matched_rules++;
+  //       if (operator === "not" && cart_value !== value) matched_rules++;
+  //     } else {
+  //       if (operator === "is" && found.value === value) matched_rules++;
+  //       if (operator === "not" && found.value !== value) matched_rules++;
+  //       if (operator === "greater than" && Number(found.value) > Number(value))
+  //         matched_rules++;
+  //       if (operator === "less than" && Number(found.value) < Number(value))
+  //         matched_rules++;
+  //     }
+  //   }
+  //   return matched_rules;
+  // };
 
   const getWrapperClass = (field) => {
     let classname = `wcforce-field-wrapper ${field.input} ${field.field_id}`;

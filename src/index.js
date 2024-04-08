@@ -5,6 +5,8 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import Render from "./frontend/Render";
 
+window.wcforce_product_id = 1928;
+
 // settings - backend
 const wcforce_settings = ReactDOM.createRoot(
   document.getElementById("wcforce-root")
