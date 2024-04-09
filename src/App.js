@@ -18,6 +18,7 @@ const App = () => {
   const [Fields, setFields] = useLocalStorage("wcforce_fields", []);
 
   const group_id = wcforce_get_group_id();
+  // console.log(group_id);
 
   const handleSaveMeta = async (fields) => {
     if (fields.length === 0) {

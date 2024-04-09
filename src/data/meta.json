@@ -15,12 +15,9 @@
           "Select Type",
           "radio",
           "checkbox",
+          "switch",
           "autocomplete",
-          "select",
-          "color",
-          "image",
-          "audio-video",
-          "timezone"
+          "select"
         ]
       },
       {
