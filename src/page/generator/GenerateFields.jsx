@@ -156,6 +156,7 @@ const FieldGenerator = ({ meta, SavedFields, onSaveMeta }) => {
 
   const handleSaveConditions = (index, conditions) => {
     setSavedFields((currentsavedFields) => {
+      conditions = conditions.rules.length === 0 ? null : conditions;
       console.log(conditions);
       return currentsavedFields.map((field, fieldIndex) => {
         if (fieldIndex === index) {

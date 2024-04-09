@@ -26,6 +26,7 @@ const App = () => {
       return;
     }
 
+    // console.log(fields);
     try {
       const post_data = {
         group_id,
