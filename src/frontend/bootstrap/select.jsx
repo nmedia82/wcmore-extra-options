@@ -1,23 +1,26 @@
-const Select = ({ meta, onMetaChange }) => {
+import Form from "react-bootstrap/Form";
+
+const Select = ({ field, onFieldChange, FieldObj }) => {
+  // console.log(field);
   return (
-    <div className="wcforce-field-wrapper">
-      <select
-        name={meta.name}
-        id={meta.name}
-        placeholder={meta.title}
-        className="wcmore-input"
-        onChange={(e) => onMetaChange(e, meta)}
-        value={meta.value}
-      >
-        {meta.options.map((option) => (
-          <option key={option.toString()} value={option}>
-            {option}
+    <Form.Group controlId={FieldObj.id()}>
+      <Form.Label>
+        {FieldObj.title()}
+        {FieldObj.required() && <span className="text-danger">*</span>}
+      </Form.Label>
+      <Form.Select
+        name={FieldObj.name()}
+        placeholder={FieldObj.placeholder()}
+        onChange={(e) => onFieldChange(e, field)}
+        value={field.value}
+        aria-label="Default select example">
+        {field.options.map((option) => (
+          <option key={option.option_id} value={option.label}>
+            {option.label}
           </option>
         ))}
-      </select>
-      <br />
-      <small>{meta.detail}</small>
-    </div>
+      </Form.Select>
+    </Form.Group>
   );
 };
 

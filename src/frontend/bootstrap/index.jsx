@@ -4,6 +4,7 @@ import Boolean from "./boolean";
 import Select from "./select";
 import Checkbox from "./checkbox";
 import Radio from "./radio";
+import AutoComplete from "./autocomplete";
 // import AutoComplete from "./fields/material/autocomplete"
 
 const BootstrapFields = ({ field, onFieldChange, FieldObj }) => {
@@ -46,6 +47,15 @@ const BootstrapFields = ({ field, onFieldChange, FieldObj }) => {
     case "radio":
       return (
         <Radio
+          field={field}
+          FieldObj={FieldObj}
+          onFieldChange={onFieldChange}
+        />
+      );
+
+    case "autocomplete":
+      return (
+        <AutoComplete
           field={field}
           FieldObj={FieldObj}
           onFieldChange={onFieldChange}
