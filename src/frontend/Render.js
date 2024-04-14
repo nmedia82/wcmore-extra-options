@@ -10,6 +10,7 @@ import { wcforce_get_group_id } from "../common/helper";
 import { getProductExtraFields } from "../services/modalService";
 import { toast, ToastContainer } from "react-toastify";
 import { Col, Row } from "react-bootstrap";
+import PriceDisplay from "./price";
 
 const Item = styled("div")({
   color: "darkslategray",
@@ -26,7 +27,7 @@ function Render() {
   const [Fields, setFields] = useState([]);
   const [Conditions, setConditions] = useState([]);
   const [ConditionallyBound, setConditionallyBound] = useState([]);
-  const [CartData, setCartData] = useState([]);
+  const [CartPrices, setCartPrices] = useState([]);
 
   const group_id = wcforce_get_group_id();
 
@@ -41,7 +42,7 @@ function Render() {
         let { data: fields } = await getProductExtraFields(
           window.wcforce_product_id
         );
-        console.log(fields);
+        // console.log(fields);
         fields = fields.map((f) => ({
           ...f,
           is_hidden: is_conditionally_hidden(f),
@@ -66,7 +67,7 @@ function Render() {
         setConditions(conditions);
         setConditionallyBound(conditionally_bound);
 
-        console.log(fields, conditions, conditionally_bound);
+        // console.log(fields, conditions, conditionally_bound);
 
         setFields(fields);
       } catch (error) {
@@ -79,6 +80,7 @@ function Render() {
   }, [group_id]);
 
   const handleFieldChange = (e, meta) => {
+    console.log(e, meta);
     let value = meta.input === "checkbox" ? [] : "";
     if (meta.input === "checkbox") {
       const { id: opt_id, checked } = e.target;
@@ -91,6 +93,21 @@ function Render() {
       value = options.filter((option) => option.checked).map((o) => o.label);
     } else {
       value = e.target.value;
+    }
+
+    // setting prices info
+    let prices = [];
+    if (meta.options.length > 0) {
+      if ("checkbox" === meta.input || "radio" === meta.input) {
+        prices = [
+          ...CartPrices,
+          meta.options.filter((option) => option.checked),
+        ];
+      } else {
+        prices = [...CartPrices, meta.options.filter((o) => o.label === value)];
+      }
+
+      setCartPrices(prices);
     }
 
     // updating value of current field
@@ -175,7 +192,7 @@ function Render() {
   return (
     <div className="wcforce-extra-fields-wrapper">
       <ToastContainer />
-      {/* <PriceDisplay CartData={CartData} Hello={"hi"} /> */}
+      <PriceDisplay CartPrices={CartPrices} Hello={"hi"} />
       {/* <input
         type="hidden"
         name="wcforce_cart_data"
