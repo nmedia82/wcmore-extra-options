@@ -27,7 +27,7 @@ function Render() {
   const [Fields, setFields] = useState([]);
   const [Conditions, setConditions] = useState([]);
   const [ConditionallyBound, setConditionallyBound] = useState([]);
-  const [CartPrices, setCartPrices] = useState([]);
+  const [CartPrices, setCartPrices] = useState({});
 
   const group_id = wcforce_get_group_id();
 
@@ -98,13 +98,16 @@ function Render() {
     // setting prices info
     let prices = [];
     if (meta.options.length > 0) {
-      if ("checkbox" === meta.input || "radio" === meta.input) {
-        prices = [
+      if ("checkbox" === meta.input) {
+        prices = {
           ...CartPrices,
-          meta.options.filter((option) => option.checked),
-        ];
+          [meta.id]: meta.options.filter((option) => option.checked),
+        };
       } else {
-        prices = [...CartPrices, meta.options.filter((o) => o.label === value)];
+        prices = {
+          ...CartPrices,
+          [meta.id]: meta.options.filter((o) => o.label === value),
+        };
       }
 
       setCartPrices(prices);
@@ -145,7 +148,7 @@ function Render() {
     const ruleMatches = rules.map((rule) =>
       matchRule(rule, user_values, field.field_id)
     );
-    console.log(field.field_id, ruleBound, user_values, ruleMatches);
+    // console.log(field.field_id, ruleBound, user_values, ruleMatches);
 
     const anyRuleMatched = ruleMatches.some(Boolean);
     const allRulesMatched = ruleMatches.every(Boolean);
