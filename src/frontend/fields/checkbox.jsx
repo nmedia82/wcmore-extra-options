@@ -7,7 +7,7 @@ const Checkbox = ({ field, FieldObj, onFieldChange }) => {
           <input
             type="checkbox"
             name={FieldObj.name()}
-            id={FieldObj.id()}
+            id={option.option_id}
             className={FieldObj.class()}
             onChange={(e) => onFieldChange(e, field)}
             value={option.label}

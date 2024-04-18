@@ -21,3 +21,9 @@ export function saveExtraFields(fields) {
   const url = `${api_url}/save-fields`;
   return httpService.post(url, fields);
 }
+
+// get extra fields by id
+export function getProductExtraFields(product_id) {
+  const url = `${api_url}/get-product-fields?product_id=${product_id}`;
+  return httpService.get(url);
+}

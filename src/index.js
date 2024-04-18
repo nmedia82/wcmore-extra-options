@@ -5,6 +5,10 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import Render from "./frontend/Render";
 
+window.wcforce_product_id = 1928;
+window.wcforce_product_title = "Product Title";
+window.wcforce_product_price = 50.0;
+
 // settings - backend
 const wcforce_settings = ReactDOM.createRoot(
   document.getElementById("wcforce-root")
