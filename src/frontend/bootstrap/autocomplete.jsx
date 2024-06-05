@@ -6,7 +6,7 @@ export default function AutoComplete({ field, onFieldChange, FieldObj }) {
     ["label"]: o.label,
     ["value"]: o.label,
   }));
-  console.log(options);
+
   return (
     <Form.Group controlId={FieldObj.id()}>
       <Form.Label>
@@ -14,7 +14,11 @@ export default function AutoComplete({ field, onFieldChange, FieldObj }) {
         {FieldObj.required() && <span className="text-danger">*</span>}
       </Form.Label>
 
-      <Select options={options} />
+      <Select
+        options={options}
+        isMulti
+        onFieldChange={(e) => onFieldChange(e, field)}
+      />
     </Form.Group>
   );
 }
